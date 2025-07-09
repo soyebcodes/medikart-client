@@ -8,6 +8,8 @@ import pharmacyLottie from "../../assets/lottie/pharmacy-register.json";
 import { useAuth } from "../../hooks/useAuth";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
+import { saveUserToDB } from "../../api/saveUserToDB";
+import { getJWTToken } from "../../api/auth";
 
 const Register = () => {
   const { googleLogin, githubLogin } = useAuth();
@@ -29,6 +31,15 @@ const Register = () => {
         photoURL: photo,
       });
 
+      // save user to db
+      const userData = {
+        username,
+        email,
+        photo,
+        role,
+      };
+      await saveUserToDB(userData);
+      await getJWTToken(email);
       toast.success("Account created successfully!");
       reset();
       navigate("/");
@@ -39,7 +50,18 @@ const Register = () => {
 
   const handleGoogleSignup = async () => {
     try {
-      await googleLogin();
+      const result = await googleLogin();
+      const { user } = result;
+
+      const userData = {
+        username: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+        role: "user",
+      };
+
+      await saveUserToDB(userData);
+      await getJWTToken(user.email); // get and store the token
       toast.success("Signed up with Google!");
       navigate("/");
     } catch (err) {
@@ -49,7 +71,18 @@ const Register = () => {
 
   const handleGithubSignup = async () => {
     try {
-      await githubLogin();
+      const result = await githubLogin();
+      const { user } = result;
+
+      const userData = {
+        username: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+        role: "user",
+      };
+
+      await saveUserToDB(userData);
+      await getJWTToken(user.email);
       toast.success("Signed up with GitHub!");
       navigate("/");
     } catch (err) {
