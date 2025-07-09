@@ -1,9 +1,17 @@
-import { Navigate, Outlet } from "react-router";
+import { Navigate, useLocation } from "react-router";
+import { useAuth } from "../hooks/useAuth";
 
-const PrivateRoute = () => {
-  const token = localStorage.getItem("accessToken");
+const PrivateRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  const location = useLocation();
 
-  return token ? <Outlet /> : <Navigate to="/login" replace />;
+  if (loading) return <div>Loading...</div>;
+
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
 };
 
 export default PrivateRoute;
