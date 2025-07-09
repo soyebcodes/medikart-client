@@ -30,7 +30,7 @@ const AuthProvider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  const signInWithGoogle = () => {
+  const googleLogin = () => {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
@@ -50,7 +50,6 @@ const AuthProvider = ({ children }) => {
     const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       console.log("user in the auth state change", currentUser);
-
       setLoading(false);
     });
     return () => {
@@ -61,7 +60,7 @@ const AuthProvider = ({ children }) => {
   const authInfo = {
     createUser,
     signIn,
-    signInWithGoogle,
+    googleLogin,
     user,
     loading,
     logOutUser,
