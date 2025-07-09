@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../../firebase/firebase.config";
@@ -185,6 +185,19 @@ const Register = () => {
                 <FaGithub className="text-xl" />
                 GitHub
               </button>
+            </div>
+            <div className="p-8">
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Already have an account?{" "}
+                  <a
+                    href="/login"
+                    className="text-blue-600 dark:text-blue-400 font-medium hover:underline"
+                  >
+                    Login here
+                  </a>
+                </p>
+              </div>
             </div>
           </div>
         </div>
