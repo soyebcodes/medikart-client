@@ -6,6 +6,10 @@ import Login from "../pages/Login/Login";
 import DashboardLayout from "../layouts/DashboardLayout";
 import PrivateRoute from "../routes/PrivateRoute";
 import DashboardHome from "../pages/Dashboard/DashboardHome";
+import { updateProfile } from "firebase/auth";
+import UpdateProfile from "../pages/Dashboard/Shared/UpdateProfile";
+import AdminRoute from "../routes/AdminRoute";
+import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 
 export const router = createBrowserRouter([
   {
@@ -28,7 +32,6 @@ export const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-
     element: (
       <PrivateRoute>
         <DashboardLayout />
@@ -38,6 +41,22 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: DashboardHome,
+      },
+      {
+        path: "profile",
+        element: (
+          <PrivateRoute>
+            <UpdateProfile />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "manage-users",
+        element: (
+          <AdminRoute>
+            <ManageUsers />
+          </AdminRoute>
+        ),
       },
     ],
   },
