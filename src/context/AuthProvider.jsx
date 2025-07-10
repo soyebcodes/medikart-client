@@ -47,14 +47,37 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      console.log("user in the auth state change", currentUser);
+    const unSubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        try {
+          const res = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL}/api/users/role/${
+              currentUser.email
+            }`
+          );
+          const data = await res.json();
+          setUser({
+            ...currentUser,
+            role: data.role || "user",
+            displayName: data.username || currentUser.displayName,
+            photoURL: data.photo || currentUser.photoURL,
+          });
+        } catch (error) {
+          console.error("Error fetching user role:", error);
+          setUser({
+            ...currentUser,
+            role: "user",
+            displayName: currentUser.displayName || "Anonymous",
+            photoURL: currentUser.photoURL || "",
+          });
+        }
+      } else {
+        setUser(null);
+      }
       setLoading(false);
     });
-    return () => {
-      unSubscribe();
-    };
+
+    return () => unSubscribe();
   }, []);
 
   const authInfo = {

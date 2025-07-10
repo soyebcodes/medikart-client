@@ -2,10 +2,10 @@ import axios from "axios";
 
 export const saveUserToDB = async (user) => {
   const userData = {
-    username: user.displayName || "Unnamed",
+    username: user.username || user.displayName || "Unnamed",
     email: user.email,
-    photo: user.photoURL || "",
-    role: "user", 
+    photo: user.photo || user.photoURL || "",
+    role: user.role || "user", // <-- use role passed in, fallback to 'user'
   };
 
   try {

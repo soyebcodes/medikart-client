@@ -5,12 +5,21 @@ import AdminSidebar from "../components/Dashboard/AdminSidebar";
 import { useAuth } from "../hooks/useAuth";
 
 const DashboardLayout = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading || !user || !user.role) {
+    // Wait for Firebase auth + role to load
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <span className="loading loading-ring loading-lg text-primary"></span>
+      </div>
+    );
+  }
 
   let SidebarComponent = UserSidebar; // default
 
-  if (user?.role === "admin") SidebarComponent = AdminSidebar;
-  else if (user?.role === "seller") SidebarComponent = SellerSidebar;
+  if (user.role === "admin") SidebarComponent = AdminSidebar;
+  else if (user.role === "seller") SidebarComponent = SellerSidebar;
 
   return (
     <div className="flex min-h-screen">
