@@ -10,6 +10,7 @@ import { updateProfile } from "firebase/auth";
 import UpdateProfile from "../pages/Dashboard/Shared/UpdateProfile";
 import AdminRoute from "../routes/AdminRoute";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
+import ManageCategories from "../pages/Dashboard/Admin/ManageCategories";
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +56,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <ManageUsers />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "admin/manage-categories",
+        element: (
+          <AdminRoute>
+            <ManageCategories />
           </AdminRoute>
         ),
       },
