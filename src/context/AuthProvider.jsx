@@ -55,12 +55,14 @@ const AuthProvider = ({ children }) => {
               currentUser.email
             }`
           );
+
           const data = await res.json();
           setUser({
             ...currentUser,
-            role: data.role || "user",
-            displayName: data.username || currentUser.displayName,
-            photoURL: data.photo || currentUser.photoURL,
+            role: data?.role || "user",
+            displayName:
+              data?.username || currentUser.displayName || "Anonymous",
+            photoURL: data?.photo || currentUser.photoURL || "",
           });
         } catch (error) {
           console.error("Error fetching user role:", error);
