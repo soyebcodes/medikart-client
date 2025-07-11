@@ -34,7 +34,7 @@ const ManageMedicines = () => {
     });
 
     if (confirm.isConfirmed) {
-      await axiosSecure.delete(`/medicines/${id}`);
+      await axiosSecure.delete(`/api/medicines/${id}`);
       refetch();
       Swal.fire("Deleted!", "Medicine removed.", "success");
     }
