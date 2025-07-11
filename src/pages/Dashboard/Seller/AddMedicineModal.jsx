@@ -7,22 +7,33 @@ const AddMedicineModal = ({ refetch, closeModal }) => {
   const axiosSecure = useAxiosSecure();
 
   const onSubmit = async (data) => {
-    data.pricePerUnit = parseFloat(data.pricePerUnit);
-    data.discountPercentage = parseFloat(data.discountPercentage || 0);
-    data.unit = data.unit.toUpperCase();
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("genericName", data.genericName);
+    formData.append("shortDescription", data.shortDescription);
+    formData.append("category", data.category);
+    formData.append("company", data.company);
+    formData.append("unit", data.unit.toUpperCase());
+    formData.append("pricePerUnit", parseFloat(data.pricePerUnit));
+    formData.append(
+      "discountPercentage",
+      parseFloat(data.discountPercentage || 0)
+    );
+    formData.append("image", data.image[0]); // file
 
     try {
-      await axiosSecure.post("/api/medicines", data);
-      Swal.fire("Success", "Medicine added!", "success");
+      await axiosSecure.post("/api/medicines", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      Swal.fire("Success", "Medicine added successfully!", "success");
       reset();
-      refetch(); // refresh the medicine list
-      closeModal(); // close the modal
+      refetch();
+      closeModal();
     } catch (err) {
-      Swal.fire(
-        "Error",
-        err.response?.data?.error || "Failed to add medicine",
-        "error"
-      );
+      Swal.fire("Error", err.response?.data?.error || "Upload failed", "error");
     }
   };
 
@@ -55,11 +66,12 @@ const AddMedicineModal = ({ refetch, closeModal }) => {
       />
 
       <input
-        {...register("image")}
-        placeholder="Image URL"
-        className="input input-bordered col-span-2"
-        required
+        type="file"
+        accept="image/*"
+        {...register("image", { required: true })}
+        className="file-input file-input-bordered col-span-2"
       />
+
       <textarea
         {...register("shortDescription")}
         placeholder="Short Description"
