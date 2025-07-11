@@ -4,9 +4,11 @@ import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import AddMedicineModal from "./AddMedicineModal";
 import { jwtDecode } from "jwt-decode";
+import EditMedicineModal from "./EditMedicineModal";
 
 const ManageMedicines = () => {
   const [open, setOpen] = useState(false);
+  const [editMedicine, setEditMedicine] = useState(null);
   const axiosSecure = useAxiosSecure();
 
   const token = localStorage.getItem("access-token");
@@ -65,6 +67,24 @@ const ManageMedicines = () => {
         </dialog>
       )}
 
+      {/* Edit Modal */}
+      {editMedicine && (
+        <dialog className="modal modal-open">
+          <div className="modal-box max-w-2xl">
+            <h3 className="font-bold text-lg mb-4">Edit Medicine</h3>
+            <EditMedicineModal
+              medicine={editMedicine}
+              refetch={refetch}
+              closeModal={() => setEditMedicine(null)}
+            />
+            <div className="modal-action">
+              <button className="btn" onClick={() => setEditMedicine(null)}>
+                Close
+              </button>
+            </div>
+          </div>
+        </dialog>
+      )}
       <div className="overflow-x-auto mt-6">
         <table className="table table-zebra">
           <thead>
@@ -83,7 +103,13 @@ const ManageMedicines = () => {
                 <td>${med.pricePerUnit}</td>
                 <td>{med.discountPercentage}%</td>
                 <td>{med.isAdvertised ? "Yes" : "No"}</td>
-                <td>
+                <td className="flex gap-2">
+                  <button
+                    className="btn btn-xs btn-warning"
+                    onClick={() => setEditMedicine(med)}
+                  >
+                    Edit
+                  </button>
                   <button
                     className="btn btn-xs btn-error"
                     onClick={() => handleDelete(med._id)}
