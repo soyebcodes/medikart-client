@@ -14,6 +14,7 @@ import DashboardRedirect from "../pages/Dashboard/DashboardRedirect";
 import AdminHome from "../pages/Dashboard/Admin/AdminHome";
 import UserHome from "../pages/Dashboard/User/UserHome";
 import PaymentHistory from "../pages/Dashboard/Seller/PaymentHistory";
+import AdvertisementPage from "../pages/Dashboard/Seller/AdvertisementPage";
 
 export const router = createBrowserRouter([
   {
@@ -99,6 +100,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <PaymentHistory />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "seller/advertisement",
+        element: (
+          <PrivateRoute>
+            <AdvertisementPage />
           </PrivateRoute>
         ),
       },
