@@ -9,8 +9,15 @@ export const fetchCategories = async () => {
 
 // For createCategory and updateCategory, expect 'category' to be FormData
 export const createCategory = async (formData) => {
-  return (await axios.post(`${BASE_URL}/api/categories`, formData)).data;
+  try {
+    const { data } = await axios.post(`${BASE_URL}/api/categories`, formData);
+    return data;
+  } catch (error) {
+    console.error("Create Category API error response:", error.response?.data);
+    throw error;
+  }
 };
+
 
 export const updateCategory = async (id, formData) => {
   return (await axios.put(`${BASE_URL}/api/categories/${id}`, formData)).data;
