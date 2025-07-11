@@ -5,15 +5,15 @@ import Register from "../pages/Register/Register";
 import Login from "../pages/Login/Login";
 import DashboardLayout from "../layouts/DashboardLayout";
 import PrivateRoute from "../routes/PrivateRoute";
-import DashboardHome from "../pages/Dashboard/DashboardHome";
-import { updateProfile } from "firebase/auth";
-import UpdateProfile from "../pages/Dashboard/Shared/UpdateProfile";
 import AdminRoute from "../routes/AdminRoute";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 import ManageCategories from "../pages/Dashboard/Admin/ManageCategories";
 import ManageMedicines from "../pages/Dashboard/Seller/ManageMedicines";
 import SellerDashboard from "../pages/Dashboard/Seller/SellerDashboard";
 import DashboardRedirect from "../pages/Dashboard/DashboardRedirect";
+import AdminHome from "../pages/Dashboard/Admin/AdminHome";
+import UserHome from "../pages/Dashboard/User/UserHome";
+import PaymentHistory from "../pages/Dashboard/Seller/PaymentHistory";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +47,14 @@ export const router = createBrowserRouter([
         Component: DashboardRedirect,
       },
       {
+        path: "admin/home",
+        element: (
+          <AdminRoute>
+            <AdminHome />
+          </AdminRoute>
+        ),
+      },
+      {
         path: "admin/manage-users",
         element: (
           <AdminRoute>
@@ -63,6 +71,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "user/home",
+        element: (
+          <PrivateRoute>
+            <UserHome />
+          </PrivateRoute>
+        ),
+      },
+      {
         path: "seller/home",
         element: (
           <PrivateRoute>
@@ -75,6 +91,14 @@ export const router = createBrowserRouter([
         element: (
           <PrivateRoute>
             <ManageMedicines />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "seller/payment-history",
+        element: (
+          <PrivateRoute>
+            <PaymentHistory />
           </PrivateRoute>
         ),
       },
