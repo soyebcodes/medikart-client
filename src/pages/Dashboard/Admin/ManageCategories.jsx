@@ -67,18 +67,29 @@ const ManageCategories = () => {
     if (!newCategory.categoryName || !newCategory.categoryImage) {
       return toast.error("Please fill all fields");
     }
-    createMutation.mutate(newCategory);
+
+    const formData = new FormData();
+    formData.append("categoryName", newCategory.categoryName);
+    formData.append("categoryImage", newCategory.categoryImage);
+
+    createMutation.mutate(formData);
   };
 
   const handleUpdate = (e) => {
     e.preventDefault();
-    if (!editingCategory.categoryName || !editingCategory.categoryImage) {
+    if (!editingCategory.categoryName) {
       return toast.error("Please fill all fields");
     }
-    updateMutation.mutate({
-      id: editingCategory._id,
-      category: editingCategory,
-    });
+
+    const formData = new FormData();
+    formData.append("categoryName", editingCategory.categoryName);
+
+    // Append image only if it's a File object (means user uploaded new image)
+    if (editingCategory.categoryImage instanceof File) {
+      formData.append("categoryImage", editingCategory.categoryImage);
+    }
+
+    updateMutation.mutate({ id: editingCategory._id, category: formData });
   };
 
   return (
@@ -97,14 +108,14 @@ const ManageCategories = () => {
           className="input input-bordered mr-2"
         />
         <input
-          type="text"
-          placeholder="Category Image URL"
-          value={newCategory.categoryImage}
+          type="file"
+          accept="image/*"
           onChange={(e) =>
-            setNewCategory({ ...newCategory, categoryImage: e.target.value })
+            setNewCategory({ ...newCategory, categoryImage: e.target.files[0] })
           }
           className="input input-bordered mr-2"
         />
+
         <button type="submit" className="btn btn-primary">
           Add Category
         </button>
@@ -128,16 +139,17 @@ const ManageCategories = () => {
                   className="input input-bordered mr-2"
                 />
                 <input
-                  type="text"
-                  value={editingCategory.categoryImage}
+                  type="file"
+                  accept="image/*"
                   onChange={(e) =>
                     setEditingCategory({
                       ...editingCategory,
-                      categoryImage: e.target.value,
+                      categoryImage: e.target.files[0],
                     })
                   }
                   className="input input-bordered mr-2"
                 />
+
                 <button
                   onClick={handleUpdate}
                   className="btn btn-success btn-sm mr-2"
