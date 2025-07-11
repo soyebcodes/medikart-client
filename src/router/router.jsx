@@ -11,6 +11,7 @@ import UpdateProfile from "../pages/Dashboard/Shared/UpdateProfile";
 import AdminRoute from "../routes/AdminRoute";
 import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
 import ManageCategories from "../pages/Dashboard/Admin/ManageCategories";
+import ManageMedicines from "../pages/Dashboard/Seller/ManageMedicines";
 
 export const router = createBrowserRouter([
   {
@@ -65,6 +66,14 @@ export const router = createBrowserRouter([
           <AdminRoute>
             <ManageCategories />
           </AdminRoute>
+        ),
+      },
+      {
+        path: "seller/manage-medicines",
+        element: (
+          <PrivateRoute>
+            <ManageMedicines />
+          </PrivateRoute>
         ),
       },
     ],
