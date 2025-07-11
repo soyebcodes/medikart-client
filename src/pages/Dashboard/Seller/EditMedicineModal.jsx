@@ -20,29 +20,35 @@ const EditMedicineModal = ({ medicine, closeModal, refetch }) => {
   const axiosSecure = useAxiosSecure();
 
   const onSubmit = async (data) => {
-    data.pricePerUnit = parseFloat(data.pricePerUnit);
-    data.discountPercentage = parseFloat(data.discountPercentage || 0);
-    data.unit = data.unit.toUpperCase();
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("genericName", data.genericName);
+    formData.append("shortDescription", data.shortDescription);
+    formData.append("category", data.category);
+    formData.append("company", data.company);
+    formData.append("unit", data.unit.toUpperCase());
+    formData.append("pricePerUnit", parseFloat(data.pricePerUnit));
+    formData.append(
+      "discountPercentage",
+      parseFloat(data.discountPercentage || 0)
+    );
+
+    if (data.image[0]) {
+      formData.append("image", data.image[0]);
+    }
 
     try {
-      const res = await axiosSecure.patch(
-        `/api/medicines/${medicine._id}`,
-        data
-      );
-      if (res.data?.updated) {
-        Swal.fire("Success", "Medicine updated!", "success");
-        refetch();
-        closeModal();
-      } else {
-        throw new Error("Update failed");
-      }
+      await axiosSecure.patch(`/api/medicines/${medicine._id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      Swal.fire("Success", "Medicine updated!", "success");
+      refetch();
+      closeModal();
     } catch (error) {
-      console.error("Update error:", error);
-      Swal.fire(
-        "Error",
-        error.response?.data?.error || "Failed to update medicine",
-        "error"
-      );
+      Swal.fire("Error", error.message || "Update failed", "error");
     }
   };
 
@@ -75,11 +81,12 @@ const EditMedicineModal = ({ medicine, closeModal, refetch }) => {
       />
 
       <input
+        type="file"
+        accept="image/*"
         {...register("image")}
-        placeholder="Image URL"
-        className="input input-bordered col-span-2"
-        required
+        className="file-input file-input-bordered col-span-2"
       />
+
       <textarea
         {...register("shortDescription")}
         placeholder="Short Description"
