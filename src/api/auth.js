@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const getJWTToken = async (email) => {
-  const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/jwt`, {
+  const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/jwt`, {
     email,
   });
 

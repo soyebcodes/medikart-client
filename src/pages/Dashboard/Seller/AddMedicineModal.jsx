@@ -12,7 +12,7 @@ const AddMedicineModal = ({ refetch, closeModal }) => {
     data.unit = data.unit.toUpperCase();
 
     try {
-      await axiosSecure.post("/medicines", data);
+      await axiosSecure.post("/api/medicines", data);
       Swal.fire("Success", "Medicine added!", "success");
       reset();
       refetch(); // refresh the medicine list
