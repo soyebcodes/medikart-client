@@ -3,14 +3,37 @@ import HeroSlider from "./HeroSlider";
 import CategoryCardSection from "./Category/CategoryCard";
 import DiscountProducts from "./DiscountProducts";
 import NewArrivals from "./NewArrivals";
+import ReviewSection from "./ReviewSection";
+import { Suspense } from "react";
 
 const Home = () => {
   return (
     <div>
       <HeroSlider />
-      <CategoryCardSection />
-      <DiscountProducts />
-      <NewArrivals />
+      <Suspense
+        fallback={
+          <div className="loading loading-spinner loading-lg text-primary"></div>
+        }
+      >
+        <CategoryCardSection />
+      </Suspense>
+
+      <Suspense
+        fallback={
+          <div className="loading loading-spinner loading-lg text-primary"></div>
+        }
+      >
+        <DiscountProducts />
+      </Suspense>
+
+      <Suspense
+        fallback={
+          <div className="loading loading-spinner loading-lg text-primary"></div>
+        }
+      >
+        <NewArrivals />
+      </Suspense>
+      <ReviewSection />
     </div>
   );
 };
