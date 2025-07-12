@@ -62,6 +62,9 @@ importers:
       sweetalert2:
         specifier: ^11.22.2
         version: 11.22.2
+      swiper:
+        specifier: ^11.2.10
+        version: 11.2.10
       tailwindcss:
         specifier: ^4.1.11
         version: 4.1.11
@@ -1761,6 +1764,10 @@ packages:
 
   sweetalert2@11.22.2:
     resolution: {integrity: sha512-GFQGzw8ZXF23PO79WMAYXLl4zYmLiaKqYJwcp5eBF07wiI5BYPbZtKi2pcvVmfUQK+FqL1risJAMxugcPbGIyg==}
+
+  swiper@11.2.10:
+    resolution: {integrity: sha512-RMeVUUjTQH+6N3ckimK93oxz6Sn5la4aDlgPzB+rBrG/smPdCTicXyhxa+woIpopz+jewEloiEE3lKo1h9w2YQ==}
+    engines: {node: '>= 4.7.0'}
 
   tailwindcss@4.1.11:
     resolution: {integrity: sha512-2E9TBm6MDD/xKYe+dvJZAmg3yxIEDNRc0jwlNyDg/4Fil2QcSLjFKGVff0lAf1jjeaArlG/M75Ey/EYr/OJtBA==}
@@ -3570,6 +3577,8 @@ snapshots:
     optional: true
 
   sweetalert2@11.22.2: {}
+
+  swiper@11.2.10: {}
 
   tailwindcss@4.1.11: {}
 

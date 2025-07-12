@@ -1,10 +1,38 @@
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const AddMedicineModal = ({ refetch, closeModal }) => {
-  const { register, handleSubmit, reset } = useForm();
+const AddMedicineModal = ({ closeModal }) => {
   const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
+
+  const { register, handleSubmit, reset } = useForm();
+
+  // Mutation for adding medicine
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: async (formData) => {
+      const res = await axiosSecure.post("/api/medicines", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["medicines"] });
+      Swal.fire("Success", "Medicine added successfully!", "success");
+      reset();
+      closeModal();
+    },
+    onError: (err) => {
+      Swal.fire(
+        "Error",
+        err.response?.data?.message || "Upload failed",
+        "error"
+      );
+    },
+  });
 
   const onSubmit = async (data) => {
     const formData = new FormData();
@@ -19,50 +47,36 @@ const AddMedicineModal = ({ refetch, closeModal }) => {
       "discountPercentage",
       parseFloat(data.discountPercentage || 0)
     );
-    formData.append("image", data.image[0]); // file
+    formData.append("image", data.image[0]); // file input
 
-    try {
-      await axiosSecure.post("/api/medicines", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      Swal.fire("Success", "Medicine added successfully!", "success");
-      reset();
-      refetch();
-      closeModal();
-    } catch (err) {
-      Swal.fire("Error", err.response?.data?.error || "Upload failed", "error");
-    }
+    await mutateAsync(formData);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="grid grid-cols-2 gap-4 p-4"
+    >
       <input
-        {...register("name")}
+        {...register("name", { required: true })}
         placeholder="Medicine Name"
-        className="input input-bordered"
-        required
+        className="input input-bordered col-span-2 md:col-span-1"
       />
       <input
-        {...register("genericName")}
+        {...register("genericName", { required: true })}
         placeholder="Generic Name"
-        className="input input-bordered"
-        required
+        className="input input-bordered col-span-2 md:col-span-1"
       />
 
       <input
-        {...register("category")}
+        {...register("category", { required: true })}
         placeholder="Category"
-        className="input input-bordered"
-        required
+        className="input input-bordered col-span-2 md:col-span-1"
       />
       <input
-        {...register("company")}
+        {...register("company", { required: true })}
         placeholder="Company Name"
-        className="input input-bordered"
-        required
+        className="input input-bordered col-span-2 md:col-span-1"
       />
 
       <input
@@ -73,25 +87,30 @@ const AddMedicineModal = ({ refetch, closeModal }) => {
       />
 
       <textarea
-        {...register("shortDescription")}
+        {...register("shortDescription", { required: true })}
         placeholder="Short Description"
         className="textarea textarea-bordered col-span-2"
-        required
+        rows={3}
       />
 
-      <select {...register("unit")} className="select select-bordered" required>
+      <select
+        {...register("unit", { required: true })}
+        className="select select-bordered col-span-2 md:col-span-1"
+      >
         <option value="">Select Unit</option>
-        <option value="Mg">Mg</option>
+        <option value="MG">MG</option>
         <option value="ML">ML</option>
+        <option value="G">G</option>
+        <option value="Tablet">Tablet</option>
+        <option value="Capsule">Capsule</option>
       </select>
 
       <input
-        {...register("pricePerUnit")}
+        {...register("pricePerUnit", { required: true })}
         type="number"
         step="0.01"
         placeholder="Price per Unit"
-        className="input input-bordered"
-        required
+        className="input input-bordered col-span-2 md:col-span-1"
       />
 
       <input
@@ -99,13 +118,17 @@ const AddMedicineModal = ({ refetch, closeModal }) => {
         type="number"
         step="0.01"
         placeholder="Discount (%)"
-        className="input input-bordered"
+        className="input input-bordered col-span-2 md:col-span-1"
         defaultValue={0}
       />
 
       <div className="col-span-2 flex justify-end">
-        <button type="submit" className="btn btn-success">
-          Add Medicine
+        <button
+          type="submit"
+          disabled={isPending}
+          className="btn btn-success w-full md:w-auto"
+        >
+          {isPending ? "Adding..." : "Add Medicine"}
         </button>
       </div>
     </form>

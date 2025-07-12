@@ -10,10 +10,19 @@ import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 import { saveUserToDB } from "../../api/saveUserToDB";
 import { getJWTToken } from "../../api/auth";
+import { useEffect } from "react";
 
 const Register = () => {
-  const { googleLogin, githubLogin } = useAuth();
+  const { googleLogin, githubLogin, user } = useAuth();
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/"); // or navigate("/dashboard") if preferred
+    }
+  }, [user, navigate]);
+
   const {
     register,
     handleSubmit,
@@ -38,6 +47,7 @@ const Register = () => {
         photo,
         role,
       };
+
       await saveUserToDB(userData);
       await getJWTToken(email);
       toast.success("Account created successfully!");
