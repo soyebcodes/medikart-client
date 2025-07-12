@@ -12,7 +12,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-0">
           {/* About Section */}
           <div className="md:w-1/4">
-            <h3 className="text-xl font-bold mb-4 text-primary">PharmaCare</h3>
+            <h3 className="text-xl font-bold mb-4 text-primary">MediKart</h3>
             <p className="text-sm">
               Your trusted online pharmacy for authentic medicines and
               healthcare products.
@@ -59,9 +59,9 @@ export default function Footer() {
               <br />
               Medical City, Pharma State
               <br />
-              Phone: +1 (555) 123-4567
+              Phone: +880 (555) 123-4567
               <br />
-              Email: support@pharmacare.com
+              Email: support@medikart.com
             </p>
           </div>
 
@@ -70,14 +70,14 @@ export default function Footer() {
             <h4 className="text-lg font-semibold mb-4">Follow Us</h4>
             <div className="flex space-x-4 text-xl">
               <a
-                href="https://facebook.com"
+                href="https://web.facebook.com/shoaib.5782"
                 aria-label="Facebook"
                 className="hover:text-primary"
               >
                 <FaFacebookF />
               </a>
               <a
-                href="https://twitter.com"
+                href="https://x.com/soyebislam_1"
                 aria-label="Twitter"
                 className="hover:text-primary"
               >
@@ -91,7 +91,7 @@ export default function Footer() {
                 <FaInstagram />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://linkedin.com/in/soyebislam3"
                 aria-label="LinkedIn"
                 className="hover:text-primary"
               >
