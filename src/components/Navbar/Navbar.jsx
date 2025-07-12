@@ -24,7 +24,7 @@ const Navbar = () => {
     document.querySelector("html").setAttribute("data-theme", stored);
   }, []);
 
-  // Toggle theme
+  // Toggle theme and save
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
@@ -32,7 +32,6 @@ const Navbar = () => {
     localStorage.setItem("theme", newTheme);
   };
 
-  // Navigation links
   const navLinks = (
     <>
       <NavLink
@@ -60,6 +59,7 @@ const Navbar = () => {
     <nav className="shadow sticky top-0 z-50 bg-base-100 text-base-content transition">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
+          {/* Logo */}
           <Link to="/" className="text-2xl font-bold text-primary">
             MediKart
           </Link>
@@ -68,6 +68,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-4">
             {navLinks}
 
+            {/* Theme toggle */}
             <button
               onClick={toggleTheme}
               className="btn btn-ghost btn-circle text-xl"
@@ -76,39 +77,32 @@ const Navbar = () => {
               {theme === "light" ? <FaMoon /> : <FaSun />}
             </button>
 
+            {/* User dropdown */}
             {user ? (
-              <div className="relative group">
-                {user?.photoURL ? (
-                  <img
-                    src={user.photoURL}
-                    alt="Profile"
-                    className="w-10 h-10 rounded-full border border-gray-300 cursor-pointer"
-                  />
-                ) : (
-                  <FaUserCircle className="text-3xl cursor-pointer" />
-                )}
-                <div className="absolute right-0 mt-2 w-40 border rounded bg-base-200 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
-                  <Link
-                    to="/update-profile"
-                    className="block px-4 py-2 hover:bg-base-300"
-                  >
-                    Update Profile
-                  </Link>
-                  {user && (
-                    <NavLink
-                      to="/dashboard"
-                      className="flex items-center gap-1 px-3 py-2 rounded hover:text-primary"
-                    >
-                      <FaUserCircle /> Dashboard
-                    </NavLink>
-                  )}
-                  <button
-                    onClick={logOutUser}
-                    className="block w-full text-center px-4 py-2 hover:bg-base-300"
-                  >
-                    Logout
-                  </button>
-                </div>
+              <div className="dropdown dropdown-end">
+                <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+                  <div className="w-10 rounded-full">
+                    {user?.photoURL ? (
+                      <img src={user.photoURL} alt="Profile" />
+                    ) : (
+                      <FaUserCircle className="text-3xl" />
+                    )}
+                  </div>
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-48"
+                >
+                  <li>
+                    <Link to="/update-profile">Update Profile</Link>
+                  </li>
+                  <li>
+                    <Link to="/dashboard">Dashboard</Link>
+                  </li>
+                  <li>
+                    <button onClick={logOutUser}>Logout</button>
+                  </li>
+                </ul>
               </div>
             ) : (
               <Link to="/register" className="btn btn-primary">
@@ -117,7 +111,7 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Toggle */}
+          {/* Mobile toggle buttons */}
           <div className="md:hidden flex items-center gap-2">
             <button onClick={toggleTheme} className="text-xl">
               {theme === "light" ? <FaMoon /> : <FaSun />}
@@ -132,7 +126,7 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden border-t bg-base-100">
-          <div className="flex flex-col  px-4 py-2 space-y-1">
+          <div className="flex flex-col px-4 py-2 space-y-1">
             {navLinks}
             {user ? (
               <>
@@ -142,9 +136,12 @@ const Navbar = () => {
                 >
                   Update Profile
                 </Link>
+                <Link to="/dashboard" className="px-3 py-2 hover:text-primary">
+                  Dashboard
+                </Link>
                 <button
                   onClick={logOutUser}
-                  className="px-3 py-2 text-center hover:text-primary"
+                  className="px-3 py-2 hover:text-primary"
                 >
                   Logout
                 </button>
