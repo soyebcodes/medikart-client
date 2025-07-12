@@ -37,37 +37,36 @@ const Navbar = () => {
     localStorage.setItem("theme", newTheme);
   };
 
+  const navLinkClass = ({ isActive }) =>
+    `flex items-center gap-1 px-3 py-2 rounded hover:text-primary ${
+      isActive ? "text-primary font-semibold" : ""
+    }`;
+
   const navLinks = (
     <>
-      <NavLink
-        to="/"
-        className="flex items-center gap-1 px-3 py-2 rounded hover:text-primary"
-      >
+      <NavLink to="/" className={navLinkClass}>
         <FaHome /> Home
       </NavLink>
-      <NavLink
-        to="/shop"
-        className="flex items-center gap-1 px-3 py-2 rounded hover:text-primary"
-      >
+      <NavLink to="/shop" className={navLinkClass}>
         <FaStore /> Shop
       </NavLink>
-      {/* Cart NavLink with badge */}
       <NavLink
         to="/cart"
-        className="relative flex items-center gap-1 px-3 py-2 rounded hover:text-primary"
+        className={navLinkClass}
         aria-label={`Cart with ${cartCount} items`}
       >
-        <FaShoppingCart size={20} />
+        <div className="relative flex items-center gap-1">
+          <FaShoppingCart size={20} />
 
-        {cartCount > 0 && (
-          <span className="absolute top-0 right-0 -mt-1 -mr-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-error rounded-full">
-            {cartCount}
-          </span>
-        )}
+          {cartCount > 0 && (
+            <span className="absolute top-0 right-0 -mt-3 -mr-4 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-error rounded-full">
+              {cartCount}
+            </span>
+          )}
+        </div>
       </NavLink>
     </>
   );
-
   return (
     <nav className="shadow sticky top-0 z-50 bg-base-100 text-base-content transition">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

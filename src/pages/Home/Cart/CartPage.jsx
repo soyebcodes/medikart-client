@@ -1,5 +1,6 @@
 import React from "react";
 import { useCartStore } from "../../../store/cartStore";
+import { Link, Navigate } from "react-router";
 
 const CartPage = () => {
   const { cart, removeFromCart, clearCart, updateQuantity } = useCartStore();
@@ -103,12 +104,9 @@ const CartPage = () => {
           Grand Total: ${grandTotal.toFixed(2)}
         </div>
 
-        <button
-          className="btn btn-primary"
-          onClick={() => alert("Checkout flow coming soon!")}
-        >
+        <Link to="/checkout" className="btn btn-primary">
           Checkout
-        </button>
+        </Link>
       </div>
     </div>
   );

@@ -21,6 +21,7 @@ import ManageAdvertised from "../pages/Dashboard/Admin/ManageAdvertised";
 import UserPaymentHistory from "../pages/Dashboard/User/UserPaymentHistory";
 import CategoryDetails from "../pages/Home/Category/CategoryDetails";
 import CartPage from "../pages/Home/Cart/CartPage";
+import CheckoutPage from "../pages/Checkout/CheckoutPage";
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
       {
         path: "/cart",
         Component: CartPage,
+      },
+      {
+        path: "checkout",
+        Component: CheckoutPage,
       },
     ],
   },
