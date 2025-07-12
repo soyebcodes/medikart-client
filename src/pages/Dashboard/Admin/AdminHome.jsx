@@ -11,7 +11,7 @@ const AdminDashboard = () => {
     const fetchTotalsAndRecent = async () => {
       try {
         const paidRes = await axios.get(
-          "http://localhost:5000/api/payments?status=paid"
+          "https://medikart-server-pjna.onrender.com/api/payments?status=paid"
         );
         const paidSum = paidRes.data.data.reduce(
           (acc, payment) => acc + payment.amount,
@@ -20,7 +20,7 @@ const AdminDashboard = () => {
         setPaidTotal(paidSum);
 
         const pendingRes = await axios.get(
-          "http://localhost:5000/api/payments?status=pending"
+          "https://medikart-server-pjna.onrender.com/api/payments?status=pending"
         );
         const pendingSum = pendingRes.data.data.reduce(
           (acc, payment) => acc + payment.amount,
@@ -29,7 +29,7 @@ const AdminDashboard = () => {
         setPendingTotal(pendingSum);
 
         const recentRes = await axios.get(
-          "http://localhost:5000/api/payments?limit=10"
+          "https://medikart-server-pjna.onrender.com/api/payments?limit=10"
         );
         setRecentPayments(recentRes.data.data || []);
       } catch (error) {

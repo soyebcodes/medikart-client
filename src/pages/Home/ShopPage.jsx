@@ -20,7 +20,9 @@ const ShopPage = () => {
     const fetchMedicines = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("http://localhost:5000/api/medicines");
+        const res = await axios.get(
+          "https://medikart-server-pjna.onrender.com/api/medicines"
+        );
         setMedicines(res.data);
       } catch (err) {
         setError("Failed to load medicines.");

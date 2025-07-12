@@ -4,7 +4,9 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 
 const fetchCategories = async () => {
-  const res = await axios.get("http://localhost:5000/api/categories");
+  const res = await axios.get(
+    "https://medikart-server-pjna.onrender.com/api/categories"
+  );
   return res.data;
 };
 

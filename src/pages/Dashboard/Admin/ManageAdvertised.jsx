@@ -4,14 +4,14 @@ const ManageAdvertised = () => {
   const [ads, setAds] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/advertised")
+    fetch("https://medikart-server-pjna.onrender.com/api/advertised")
       .then((res) => res.json())
       .then((data) => setAds(data));
   }, []);
 
   const toggleSlider = async (_id) => {
     const res = await fetch(
-      `http://localhost:5000/api/advertised/${_id}/toggle`,
+      `https://medikart-server-pjna.onrender.com/api/advertised/${_id}/toggle`,
       {
         method: "PATCH",
       }

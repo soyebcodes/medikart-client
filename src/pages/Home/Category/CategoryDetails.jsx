@@ -6,7 +6,7 @@ import { useCartStore } from "../../../store/cartStore";
 
 const fetchMedicinesByCategory = async (categoryName) => {
   const res = await axios.get(
-    `http://localhost:5000/api/medicines/category/${categoryName}`
+    `https://medikart-server-pjna.onrender.com/api/medicines/category/${categoryName}`
   );
   return res.data;
 };

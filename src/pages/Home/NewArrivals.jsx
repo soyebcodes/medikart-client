@@ -12,7 +12,7 @@ const NewArrivals = () => {
         setLoading(true);
         // Replace with your actual endpoint for new medicines or latest added
         const res = await axios.get(
-          "http://localhost:5000/api/medicines?limit=10&sort=createdAt&order=desc"
+          "https://medikart-server-pjna.onrender.com/api/medicines?limit=10&sort=createdAt&order=desc"
         );
         setMedicines(res.data.slice(0, 12));
       } catch (error) {

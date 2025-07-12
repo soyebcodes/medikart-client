@@ -13,7 +13,9 @@ const UserPaymentHistory = () => {
     queryKey: ["userPayments", user?.email],
     queryFn: () =>
       axios
-        .get(`http://localhost:5000/api/payments/user/${user.email}`)
+        .get(
+          `https://medikart-server-pjna.onrender.com/api/payments/user/${user.email}`
+        )
         .then((res) => res.data.data),
     enabled: !!user?.email,
   });

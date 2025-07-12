@@ -27,10 +27,13 @@ const CheckoutPage = () => {
   useEffect(() => {
     if (grandTotal > 0) {
       axios
-        .post("http://localhost:5000/api/payments/create-payment-intent", {
-          amount: Number(grandTotal.toFixed(2)),
-          email: user?.email || null,
-        })
+        .post(
+          "https://medikart-server-pjna.onrender.com/api/payments/create-payment-intent",
+          {
+            amount: Number(grandTotal.toFixed(2)),
+            email: user?.email || null,
+          }
+        )
         .then((res) => {
           if (res.data?.clientSecret) {
             setClientSecret(res.data.clientSecret);
@@ -82,9 +85,12 @@ const CheckoutPage = () => {
           status: "pending",
         }));
 
-        await axios.post("http://localhost:5000/api/payments/record-payment", {
-          payments: paymentData,
-        });
+        await axios.post(
+          "https://medikart-server-pjna.onrender.com/api/payments/record-payment",
+          {
+            payments: paymentData,
+          }
+        );
 
         toast.success("Payment recorded!");
         const invoiceItems = [...cart]; // backup before clearing

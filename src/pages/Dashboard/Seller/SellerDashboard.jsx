@@ -10,7 +10,9 @@ const SellerDashboard = () => {
     queryKey: ["sellerPayments", user?.email],
     queryFn: () =>
       axios
-        .get(`http://localhost:5000/api/payments/seller/${user.email}`)
+        .get(
+          `https://medikart-server-pjna.onrender.com/api/payments/seller/${user.email}`
+        )
         .then((res) => res.data.data),
     enabled: !!user?.email,
   });

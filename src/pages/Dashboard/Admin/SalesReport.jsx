@@ -11,7 +11,7 @@ const SalesReport = () => {
   const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/sales")
+    fetch("https://medikart-server-pjna.onrender.com/api/sales")
       .then((res) => res.json())
       .then((data) => {
         setSales(data);

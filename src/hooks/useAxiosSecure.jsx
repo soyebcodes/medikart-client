@@ -2,7 +2,9 @@ import axios from "axios";
 
 const useAxiosSecure = () => {
   const instance = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000",
+    baseURL:
+      import.meta.env.VITE_API_BASE_URL ||
+      "https://medikart-server-pjna.onrender.com",
   });
 
   instance.interceptors.request.use((config) => {

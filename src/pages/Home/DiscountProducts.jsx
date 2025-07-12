@@ -14,7 +14,7 @@ const DiscountProducts = () => {
       try {
         setLoading(true);
         const res = await axios.get(
-          "http://localhost:5000/api/medicines/discounts/all"
+          "https://medikart-server-pjna.onrender.com/api/medicines/discounts/all"
         );
         setProducts(res.data);
       } catch (err) {

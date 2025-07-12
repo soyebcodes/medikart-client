@@ -9,7 +9,7 @@ const HeroSlider = () => {
   const [slides, setSlides] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/advertised/slider")
+    fetch("https://medikart-server-pjna.onrender.com/api/advertised/slider")
       .then((res) => res.json())
       .then((data) => setSlides(data))
       .catch((err) => console.error("Failed to load slider ads:", err));
