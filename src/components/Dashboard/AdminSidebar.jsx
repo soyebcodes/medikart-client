@@ -15,10 +15,7 @@ const AdminSidebar = () => (
       >
         Manage Categories
       </NavLink>
-      <NavLink
-        to="/dashboard/admin/payment-management"
-        className="hover:text-blue-500"
-      >
+      <NavLink to="/dashboard/admin/payments" className="hover:text-blue-500">
         Payment Management
       </NavLink>
       <NavLink

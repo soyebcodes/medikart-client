@@ -13,15 +13,19 @@ import SellerDashboard from "../pages/Dashboard/Seller/SellerDashboard";
 import DashboardRedirect from "../pages/Dashboard/DashboardRedirect";
 import AdminHome from "../pages/Dashboard/Admin/AdminHome";
 import UserHome from "../pages/Dashboard/User/UserHome";
-import PaymentHistory from "../pages/Dashboard/Seller/PaymentHistory";
+
 import AdvertisementPage from "../pages/Dashboard/Seller/AdvertisementPage";
 import PaymentManagement from "../pages/Dashboard/Admin/PaymentManagement";
 import SalesReport from "../pages/Dashboard/Admin/SalesReport";
 import ManageAdvertised from "../pages/Dashboard/Admin/ManageAdvertised";
-import UserPaymentHistory from "../pages/Dashboard/User/UserPaymentHistory";
+
 import CategoryDetails from "../pages/Home/Category/CategoryDetails";
 import CartPage from "../pages/Home/Cart/CartPage";
 import CheckoutPage from "../pages/Checkout/CheckoutPage";
+import InvoicePage from "../pages/Checkout/InvoicePage";
+import SellerPaymentHistory from "../pages/PaymentHistory/SellerPaymentHistory";
+import UserPaymentHistory from "../pages/PaymentHistory/UserPaymentHistory";
+import Checkout from "../pages/Checkout/CheckoutPage";
 
 export const router = createBrowserRouter([
   {
@@ -50,7 +54,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "checkout",
-        Component: CheckoutPage,
+        element: <CheckoutPage />,
+      },
+      {
+        path: "invoice",
+        Component: InvoicePage,
       },
     ],
   },
@@ -91,7 +99,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "admin/payment-management",
+        path: "admin/payments",
         element: <PaymentManagement />,
       },
       {
@@ -142,7 +150,7 @@ export const router = createBrowserRouter([
         path: "seller/payment-history",
         element: (
           <PrivateRoute>
-            <PaymentHistory />
+            <SellerPaymentHistory />
           </PrivateRoute>
         ),
       },

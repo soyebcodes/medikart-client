@@ -3,14 +3,15 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useCartStore } from "../../store/cartStore";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
+import { useAuth } from "../../hooks/useAuth";
 
 const CheckoutPage = () => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
   const { cart, clearCart } = useCartStore();
-
+  const { user } = useAuth();
   const [clientSecret, setClientSecret] = useState("");
   const [processing, setProcessing] = useState(false);
 
@@ -49,10 +50,41 @@ const CheckoutPage = () => {
     } else {
       if (result.paymentIntent.status === "succeeded") {
         toast.success("Payment successful!");
-        // Store payment info in DB (optional)
-        // Navigate to invoice page
-        clearCart();
-        navigate("/invoice", { state: { payment: result.paymentIntent } });
+        try {
+          // Call your backend API to save payment
+          await axios.post(
+            "http://localhost:5000/api/payments/record-payment",
+            {
+              payments: cart.map((item) => ({
+                transactionId: result.paymentIntent.id,
+                buyerEmail: user?.email, // If you have auth context
+                sellerEmail: item.sellerEmail,
+                medicineId: item._id,
+                medicineName: item.name,
+                amount:
+                  item.pricePerUnit *
+                  item.quantity *
+                  (1 - item.discountPercentage / 100),
+                quantity: item.quantity,
+                date: new Date(),
+                status: "pending",
+              })),
+            }
+          );
+
+          toast.success("Payment recorded!");
+
+          clearCart();
+          navigate("/invoice", {
+            state: {
+              paymentIntent: result.paymentIntent,
+              items: cart, // Send the actual items for invoice
+            },
+          });
+        } catch (error) {
+          console.error("Failed to record payment:", error);
+          toast.error("Payment succeeded but failed to save invoice data");
+        }
       }
     }
   };

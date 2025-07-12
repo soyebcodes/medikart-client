@@ -1,67 +1,81 @@
-import React, { useEffect, useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 const PaymentManagement = () => {
-  const [payments, setPayments] = useState([]);
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    fetch("http://localhost:5000/api/payments")
-      .then((res) => res.json())
-      .then((data) => setPayments(data));
-  }, []);
+  const {
+    data = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["payments", "pending"],
+    queryFn: () =>
+      axiosSecure.get("/api/payments?status=pending").then((res) => res.data),
+  });
 
-  const handleAcceptPayment = async (_id) => {
-    const res = await fetch(`http://localhost:5000/api/payments/${_id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status: "paid" }),
-    });
+  const approveMutation = useMutation({
+    mutationFn: (paymentId) =>
+      axiosSecure.patch(`/api/payments/${paymentId}/approve`),
+    onSuccess: () => {
+      toast.success("Payment approved");
+      queryClient.invalidateQueries(["payments", "pending"]);
+    },
+    onError: () => {
+      toast.error("Failed to approve payment");
+    },
+  });
 
-    if (res.ok) {
-      setPayments((prev) =>
-        prev.map((p) => (p._id === _id ? { ...p, status: "paid" } : p))
-      );
-    }
-  };
+  if (isLoading) return <p>Loading payments...</p>;
+  if (error)
+    return (
+      <p>
+        Error loading payments:{" "}
+        {error?.response?.data?.message || error.message || "Unknown error"}
+      </p>
+    );
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Payment Management</h2>
-      <table className="w-full text-left border">
-        <thead>
-          <tr className="">
-            <th className="p-2">Medicine</th>
-            <th className="p-2">Buyer</th>
-            <th className="p-2">Seller</th>
-            <th className="p-2">Amount</th>
-            <th className="p-2">Status</th>
-            <th className="p-2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {payments.map((payment) => (
-            <tr key={payment.id} className="border-t">
-              <td className="p-2">{payment.medicineName}</td>
-              <td className="p-2">{payment.buyerEmail}</td>
-              <td className="p-2">{payment.sellerEmail}</td>
-              <td className="p-2">${payment.amount}</td>
-              <td className="p-2 capitalize">{payment.status}</td>
-              <td className="p-2">
-                {payment.status === "pending" && (
-                  <button
-                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded"
-                    onClick={() => handleAcceptPayment(payment._id)}
-                  >
-                    Accept Payment
-                  </button>
-                )}
-                {payment.status === "paid" && (
-                  <span className="text-green-600 font-semibold">Paid</span>
-                )}
-              </td>
+    <div>
+      <h2>Pending Payments</h2>
+      {data.length === 0 ? (
+        <p>No pending payments found.</p>
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>Transaction ID</th>
+              <th>Buyer</th>
+              <th>Medicine</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Approve</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data.map((payment) => (
+              <tr key={payment._id}>
+                <td>{payment.transactionId}</td>
+                <td>{payment.buyerEmail}</td>
+                <td>{payment.medicineName}</td>
+                <td>${payment.amount.toFixed(2)}</td>
+                <td>{new Date(payment.date).toLocaleString()}</td>
+                <td>
+                  <button
+                    onClick={() => approveMutation.mutate(payment._id)}
+                    className="btn btn-success"
+                    disabled={approveMutation.isLoading}
+                  >
+                    {approveMutation.isLoading ? "Approving..." : "Approve"}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
