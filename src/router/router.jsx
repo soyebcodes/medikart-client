@@ -26,6 +26,7 @@ import InvoicePage from "../pages/Checkout/InvoicePage";
 import SellerPaymentHistory from "../pages/PaymentHistory/SellerPaymentHistory";
 import UserPaymentHistory from "../pages/PaymentHistory/UserPaymentHistory";
 import Checkout from "../pages/Checkout/CheckoutPage";
+import ShopPage from "../pages/Home/ShopPage";
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ export const router = createBrowserRouter([
       {
         path: "invoice",
         Component: InvoicePage,
+      },
+      {
+        path: "shop",
+        element: <ShopPage />,
       },
     ],
   },
