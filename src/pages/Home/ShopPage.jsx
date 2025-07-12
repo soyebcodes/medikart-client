@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
 import { useCartStore } from "../../store/cartStore";
+
+const PAGE_SIZE = 10;
 
 const ShopPage = () => {
   const [medicines, setMedicines] = useState([]);
@@ -8,6 +10,11 @@ const ShopPage = () => {
   const [error, setError] = useState(null);
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const addToCart = useCartStore((state) => state.addToCart);
+
+  // New state for pagination, sorting and searching
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState(null); // 'asc' | 'desc' | null
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchMedicines = async () => {
@@ -25,12 +32,44 @@ const ShopPage = () => {
     fetchMedicines();
   }, []);
 
-  // Placeholder: replace with your cart handler/context
   const handleAddToCart = (medicine) => {
     addToCart(medicine);
     setSelectedMedicine(medicine); // Show details after adding to cart
-    // TODO: integrate your cart logic here
   };
+
+  // Filter medicines by search term (name, genericName, company)
+  const filteredMedicines = useMemo(() => {
+    return medicines.filter((med) => {
+      const term = searchTerm.toLowerCase();
+      return (
+        med.name.toLowerCase().includes(term) ||
+        med.genericName.toLowerCase().includes(term) ||
+        med.company.toLowerCase().includes(term)
+      );
+    });
+  }, [medicines, searchTerm]);
+
+  // Sort medicines by price
+  const sortedMedicines = useMemo(() => {
+    if (!sortOrder) return filteredMedicines;
+
+    return [...filteredMedicines].sort((a, b) => {
+      if (sortOrder === "asc") return a.pricePerUnit - b.pricePerUnit;
+      else return b.pricePerUnit - a.pricePerUnit;
+    });
+  }, [filteredMedicines, sortOrder]);
+
+  // Pagination calculation
+  const totalPages = Math.ceil(sortedMedicines.length / PAGE_SIZE);
+  const paginatedMedicines = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    return sortedMedicines.slice(start, start + PAGE_SIZE);
+  }, [sortedMedicines, currentPage]);
+
+  // Reset page to 1 if searchTerm or sortOrder changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, sortOrder]);
 
   if (loading)
     return (
@@ -45,6 +84,30 @@ const ShopPage = () => {
     <div className="max-w-7xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-8 text-primary">Shop Medicines</h1>
 
+      {/* Search & Sort */}
+      <div className="flex flex-col sm:flex-row justify-between mb-4 gap-4">
+        <input
+          type="text"
+          placeholder="Search by name, generic or company..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="input input-bordered w-full sm:max-w-xs"
+          aria-label="Search medicines"
+        />
+
+        <select
+          className="select select-bordered w-full sm:max-w-xs"
+          value={sortOrder || ""}
+          onChange={(e) => setSortOrder(e.target.value || null)}
+          aria-label="Sort by price"
+        >
+          <option value="">Sort by Price (default)</option>
+          <option value="asc">Price: Low to High</option>
+          <option value="desc">Price: High to Low</option>
+        </select>
+      </div>
+
+      {/* Medicines table */}
       <div className="overflow-x-auto rounded-lg shadow-lg">
         <table className="table w-full">
           <thead>
@@ -60,36 +123,81 @@ const ShopPage = () => {
             </tr>
           </thead>
           <tbody>
-            {medicines.map((med) => (
-              <tr key={med._id} className="hover:bg-base-100">
-                <td>{med.name}</td>
-                <td>{med.genericName}</td>
-                <td>{med.category}</td>
-                <td>{med.company}</td>
-                <td>{med.unit}</td>
-                <td>${med.pricePerUnit.toFixed(2)}</td>
-                <td>{med.discountPercentage || 0}%</td>
-                <td className="flex justify-center gap-2">
-                  <button
-                    className="btn btn-sm btn-info"
-                    onClick={() => setSelectedMedicine(med)}
-                    aria-label={`View details of ${med.name}`}
-                  >
-                    👁️
-                  </button>
-                  <button
-                    className="btn btn-sm btn-primary"
-                    onClick={() => handleAddToCart(med)}
-                    aria-label={`Select ${med.name} to add to cart`}
-                  >
-                    Select
-                  </button>
+            {paginatedMedicines.length === 0 ? (
+              <tr>
+                <td colSpan="8" className="text-center py-4 text-gray-500">
+                  No medicines found.
                 </td>
               </tr>
-            ))}
+            ) : (
+              paginatedMedicines.map((med) => (
+                <tr key={med._id} className="hover:bg-base-100">
+                  <td>{med.name}</td>
+                  <td>{med.genericName}</td>
+                  <td>{med.category}</td>
+                  <td>{med.company}</td>
+                  <td>{med.unit}</td>
+                  <td>${med.pricePerUnit.toFixed(2)}</td>
+                  <td>{med.discountPercentage || 0}%</td>
+                  <td className="flex justify-center gap-2">
+                    <button
+                      className="btn btn-sm btn-info"
+                      onClick={() => setSelectedMedicine(med)}
+                      aria-label={`View details of ${med.name}`}
+                    >
+                      👁️
+                    </button>
+                    <button
+                      className="btn btn-sm btn-primary"
+                      onClick={() => handleAddToCart(med)}
+                      aria-label={`Select ${med.name} to add to cart`}
+                    >
+                      Select
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center mt-6 space-x-3">
+          <button
+            className="btn btn-sm"
+            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+
+          {[...Array(totalPages)].map((_, idx) => {
+            const pageNum = idx + 1;
+            return (
+              <button
+                key={pageNum}
+                className={`btn btn-sm ${
+                  currentPage === pageNum ? "btn-primary" : "btn-ghost"
+                }`}
+                onClick={() => setCurrentPage(pageNum)}
+                aria-current={currentPage === pageNum ? "page" : undefined}
+              >
+                {pageNum}
+              </button>
+            );
+          })}
+
+          <button
+            className="btn btn-sm"
+            onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      )}
 
       {/* Modal for showing medicine details */}
       {selectedMedicine && (
