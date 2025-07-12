@@ -5,9 +5,11 @@ import {
   FaMoneyBillAlt,
   FaChartLine,
   FaAd,
+  FaHome,
 } from "react-icons/fa";
 
 const links = [
+  { to: "/", label: "MediKart", icon: <FaHome /> },
   {
     to: "/dashboard/admin/manage-users",
     label: "Manage Users",
@@ -43,7 +45,7 @@ const AdminSidebar = () => {
 
   return (
     <aside className="bg-base-200 dark:bg-base-300 w-20 md:w-64 p-4 h-screen sticky top-0 shadow-sm flex flex-col">
-      <nav className="flex flex-col gap-2 mt-14">
+      <nav className="flex flex-col gap-2 ">
         {links.map(({ to, label, icon }) => (
           <NavLink
             key={to}

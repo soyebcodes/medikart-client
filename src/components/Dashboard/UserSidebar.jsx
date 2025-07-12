@@ -1,47 +1,32 @@
-import { useState } from "react";
-import { NavLink } from "react-router"; // Make sure to use react-router-dom
-import DashboardHeader from "./DashboardHeader";
+import { Link, NavLink } from "react-router";
+import { FaCreditCard, FaHome } from "react-icons/fa";
 
 const UserSidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleSidebar = () => setIsOpen(!isOpen);
-
   return (
-    <div className="max-w-screen-xl mx-auto md:flex min-h-screen">
-      {/* Mobile Top Bar */}
-      <div className="flex justify-between items-center bg-base-200 p-4 md:hidden">
-        <h2 className="text-xl font-semibold text-primary">User Dashboard</h2>
-        <button
-          onClick={toggleSidebar}
-          className="btn btn-sm btn-outline btn-primary"
+    <div className="md:w-64 w-20 min-h-screen bg-base-100 shadow-lg p-4">
+      <nav className="flex flex-col gap-4 mt-8">
+        <Link
+          to="/"
+          className="flex items-center gap-3 px-4 py-2 rounded-lg transition-all hover:bg-base-200"
         >
-          {isOpen ? "Close" : "Menu"}
-        </button>
-      </div>
+          <FaHome size={24} /> Medicart
+        </Link>
+        <NavLink
+          to="/dashboard/user/payment-history"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-4 py-2 rounded-lg transition-all ${
+              isActive
+                ? "bg-primary text-white"
+                : "hover:bg-base-200 text-base-content"
+            }`
+          }
+        >
+          <FaCreditCard size={22} />
+          <span className="hidden md:inline">Payment History</span>
+        </NavLink>
 
-      {/* Sidebar */}
-      <aside
-        className={`bg-base-100 text-base-content w-full md:w-64 p-4 space-y-4 shadow-md md:shadow-none md:block ${
-          isOpen ? "block" : "hidden"
-        }`}
-      >
-        <nav className="flex flex-col space-y-2 mt-8">
-          <NavLink
-            to="/dashboard/user/payment-history"
-            className="py-2 px-3 rounded-lg bg-primary hover:text-white transition"
-          >
-            Payment History
-          </NavLink>
-        </nav>
-      </aside>
-
-      {/* Main content container example */}
-      {/* 
-      <main className="flex-1 p-4">
-        {children}
-      </main> 
-      */}
+        {/* Add more NavLinks here as needed */}
+      </nav>
     </div>
   );
 };
