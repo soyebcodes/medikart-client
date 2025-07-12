@@ -1,14 +1,13 @@
 import { Outlet } from "react-router";
-import UserSidebar from "../components/Dashboard/UserSidebar";
-import SellerSidebar from "../components/Dashboard/SellerSidebar";
-import AdminSidebar from "../components/Dashboard/AdminSidebar";
 import DashboardHeader from "../components/Dashboard/DashboardHeader";
+import UserSidebar from "../components/Dashboard/UserSidebar";
+import AdminSidebar from "../components/Dashboard/AdminSidebar";
 import { useAuth } from "../hooks/useAuth";
 
 const DashboardLayout = () => {
   const { user, loading } = useAuth();
 
-  if (loading || !user || !user.role) {
+  if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
         <span className="loading loading-ring loading-lg text-primary"></span>
@@ -16,17 +15,32 @@ const DashboardLayout = () => {
     );
   }
 
-  let SidebarComponent = UserSidebar;
+  if (!user || !user.role) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-center">
+        <p>Please login to access the dashboard.</p>
+      </div>
+    );
+  }
 
-  if (user.role === "admin") SidebarComponent = AdminSidebar;
-  else if (user.role === "seller") SidebarComponent = SellerSidebar;
+  // Show sidebar only for user and admin, NOT for seller
+  const showSidebar = user.role === "user" || user.role === "admin";
+
+  // Select sidebar if shown
+  let Sidebar = null;
+  if (user.role === "user") Sidebar = UserSidebar;
+  else if (user.role === "admin") Sidebar = AdminSidebar;
 
   return (
     <div className="flex min-h-screen bg-base-200">
-      <SidebarComponent />
+      {showSidebar && <Sidebar />}
       <div className="flex flex-col flex-1">
-        <DashboardHeader userRole={user.role} />
-        <main className="flex-1 p-6 overflow-y-auto">
+        <DashboardHeader
+          title={`${
+            user.role.charAt(0).toUpperCase() + user.role.slice(1)
+          } Dashboard`}
+        />
+        <main className="p-6 overflow-auto">
           <Outlet />
         </main>
       </div>

@@ -9,7 +9,6 @@ const UserSidebar = () => {
 
   return (
     <div className="max-w-screen-xl mx-auto md:flex min-h-screen">
-      <DashboardHeader title="User Dashboard" />
       {/* Mobile Top Bar */}
       <div className="flex justify-between items-center bg-base-200 p-4 md:hidden">
         <h2 className="text-xl font-semibold text-primary">User Dashboard</h2>
