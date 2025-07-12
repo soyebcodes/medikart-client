@@ -28,7 +28,8 @@ const CheckoutPage = () => {
     if (grandTotal > 0) {
       axios
         .post("http://localhost:5000/api/payments/create-payment-intent", {
-          amount: Number(grandTotal.toFixed(2)), // in dollars
+          amount: Number(grandTotal.toFixed(2)),
+          email: user?.email || null,
         })
         .then((res) => {
           if (res.data?.clientSecret) {
