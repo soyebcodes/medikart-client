@@ -11,11 +11,17 @@ import {
   FaSun,
 } from "react-icons/fa";
 import { useAuth } from "../../hooks/useAuth";
+import { useCartStore } from "../../store/cartStore";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [theme, setTheme] = useState("light");
   const { user, logOutUser } = useAuth();
+
+  // Fix: return cart count from selector
+  const cartCount = useCartStore((state) =>
+    state.cart.reduce((acc, item) => acc + item.quantity, 0)
+  );
 
   // Load stored theme on mount
   useEffect(() => {
@@ -24,7 +30,6 @@ const Navbar = () => {
     document.querySelector("html").setAttribute("data-theme", stored);
   }, []);
 
-  // Toggle theme and save
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
@@ -46,11 +51,19 @@ const Navbar = () => {
       >
         <FaStore /> Shop
       </NavLink>
+      {/* Cart NavLink with badge */}
       <NavLink
         to="/cart"
-        className="flex items-center gap-1 px-3 py-2 rounded hover:text-primary"
+        className="relative flex items-center gap-1 px-3 py-2 rounded hover:text-primary"
+        aria-label={`Cart with ${cartCount} items`}
       >
-        <FaShoppingCart /> Cart
+        <FaShoppingCart size={20} />
+
+        {cartCount > 0 && (
+          <span className="absolute top-0 right-0 -mt-1 -mr-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-error rounded-full">
+            {cartCount}
+          </span>
+        )}
       </NavLink>
     </>
   );
@@ -73,6 +86,7 @@ const Navbar = () => {
               onClick={toggleTheme}
               className="btn btn-ghost btn-circle text-xl"
               title="Toggle Theme"
+              aria-label="Toggle light/dark theme"
             >
               {theme === "light" ? <FaMoon /> : <FaSun />}
             </button>
@@ -113,10 +127,34 @@ const Navbar = () => {
 
           {/* Mobile toggle buttons */}
           <div className="md:hidden flex items-center gap-2">
-            <button onClick={toggleTheme} className="text-xl">
+            {/* Theme toggle */}
+            <button
+              onClick={toggleTheme}
+              className="text-xl"
+              aria-label="Toggle light/dark theme"
+            >
               {theme === "light" ? <FaMoon /> : <FaSun />}
             </button>
-            <button onClick={() => setMenuOpen(!menuOpen)}>
+
+            {/* Cart icon with badge (mobile) */}
+            <Link
+              to="/cart"
+              className="relative btn btn-ghost btn-circle"
+              aria-label={`Cart with ${cartCount} items`}
+            >
+              <FaShoppingCart size={20} />
+              {cartCount > 0 && (
+                <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-1 text-xs font-bold leading-none text-white bg-error rounded-full">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+
+            {/* Hamburger menu toggle */}
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+            >
               {menuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
             </button>
           </div>

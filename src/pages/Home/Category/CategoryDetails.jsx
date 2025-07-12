@@ -5,7 +5,9 @@ import axios from "axios";
 import { useCartStore } from "../../../store/cartStore";
 
 const fetchMedicinesByCategory = async (categoryName) => {
-  const res = await axios.get(`/api/medicines/category/${categoryName}`);
+  const res = await axios.get(
+    `http://localhost:5000/api/medicines/category/${categoryName}`
+  );
   return res.data;
 };
 
