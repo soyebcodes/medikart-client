@@ -39,7 +39,7 @@ const AdminSidebar = () => {
   const navLinkClass = ({ isActive }) =>
     isActive
       ? "bg-primary text-white"
-      : "hover:bg-primary hover:text-white text-gray-900 dark:text-gray-800";
+      : "hover:bg-primary hover:text-white text-gray-900 dark:text-gray-200";
 
   return (
     <aside className="bg-base-200 dark:bg-base-300 w-20 md:w-64 p-4 h-screen sticky top-0 shadow-sm flex flex-col">
