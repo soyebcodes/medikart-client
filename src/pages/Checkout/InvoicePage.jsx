@@ -9,7 +9,7 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
-
+import Logo from "../../assets/medikart.png";
 const lightStyles = StyleSheet.create({
   page: {
     padding: 30,
@@ -92,7 +92,7 @@ const InvoiceDocument = ({ paymentIntent, items, theme }) => {
       <Page style={styles.page}>
         <View style={{ alignItems: "center", marginBottom: 20 }}>
           <Image
-            src="https://i.ibb.co/9GHFZpF/medi-kart-logo.png" // Your logo URL
+            src={Logo} // Your logo URL
             style={styles.logo}
           />
         </View>
@@ -183,7 +183,7 @@ const InvoicePage = () => {
           >
             <div className="text-center mb-6">
               <img
-                src=""
+                src={Logo}
                 alt="MediKart Logo"
                 className="mx-auto mb-4"
                 style={{ width: 120 }}
