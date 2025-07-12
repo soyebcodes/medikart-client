@@ -1,11 +1,6 @@
-import { NavLink, Outlet } from "react-router";
+import { NavLink } from "react-router";
 import DashboardHeader from "./DashboardHeader";
 
-const SellerSidebar = () => (
-  <div>
-    <DashboardHeader />
-    <Outlet />
-  </div>
-);
+const SellerSidebar = () => <></>;
 
 export default SellerSidebar;

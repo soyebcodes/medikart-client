@@ -1,9 +1,19 @@
 // components/DashboardHeader.jsx
+import { useNavigate } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
 
 const DashboardHeader = ({ title }) => {
-  const { user, logout } = useAuth();
+  const { user, logOutUser } = useAuth();
+  const navigate = useNavigate();
 
+  const handleLogout = async () => {
+    try {
+      await logOutUser();
+      navigate("/login"); // redirect after logout
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
   return (
     <header className="w-full px-4 py-3 bg-base-100 border-b flex items-center justify-between shadow-sm z-10">
       <h2 className="text-xl font-semibold text-primary">{title}</h2>
@@ -24,7 +34,7 @@ const DashboardHeader = ({ title }) => {
               <p>{user?.email}</p>
             </li>
             <li>
-              <button onClick={logout}>Logout</button>
+              <button onClick={handleLogout}>Logout</button>
             </li>
           </ul>
         </div>
