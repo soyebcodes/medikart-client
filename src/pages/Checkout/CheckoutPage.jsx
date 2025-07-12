@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useCartStore } from "../../store/cartStore";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useAuth } from "../../hooks/useAuth";
 
 const CheckoutPage = () => {
@@ -12,96 +12,127 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const { cart, clearCart } = useCartStore();
   const { user } = useAuth();
+
   const [clientSecret, setClientSecret] = useState("");
   const [processing, setProcessing] = useState(false);
 
-  const grandTotal = cart.reduce(
-    (acc, item) =>
-      acc +
-      item.quantity * item.pricePerUnit * (1 - item.discountPercentage / 100),
-    0
-  );
+  // Calculate grand total
+  const grandTotal = cart.reduce((acc, item) => {
+    const unitPrice = Number(item.pricePerUnit || 0);
+    const discount = Number(item.discountPercentage || 0);
+    return acc + item.quantity * unitPrice * (1 - discount / 100);
+  }, 0);
 
+  // Fetch client secret from backend
   useEffect(() => {
     if (grandTotal > 0) {
       axios
         .post("http://localhost:5000/api/payments/create-payment-intent", {
-          amount: Math.round(grandTotal * 100), // convert to cents
+          amount: Number(grandTotal.toFixed(2)), // in dollars
         })
-        .then((res) => setClientSecret(res.data.clientSecret))
-        .catch((err) => console.error(err));
+        .then((res) => {
+          if (res.data?.clientSecret) {
+            setClientSecret(res.data.clientSecret);
+          } else {
+            toast.error("Failed to get payment intent");
+          }
+        })
+        .catch((err) => {
+          console.error("Error creating payment intent:", err);
+          toast.error("Error creating payment intent");
+        });
     }
   }, [grandTotal]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!stripe || !elements) return;
+    if (!stripe || !elements || !clientSecret) return;
 
     setProcessing(true);
 
     const card = elements.getElement(CardElement);
-    const result = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: { card },
-    });
+    const { error, paymentIntent } = await stripe.confirmCardPayment(
+      clientSecret,
+      {
+        payment_method: { card },
+      }
+    );
 
-    if (result.error) {
-      toast.error(result.error.message);
+    if (error) {
+      toast.error(error.message);
       setProcessing(false);
-    } else {
-      if (result.paymentIntent.status === "succeeded") {
-        toast.success("Payment successful!");
-        try {
-          // Call your backend API to save payment
-          await axios.post(
-            "http://localhost:5000/api/payments/record-payment",
-            {
-              payments: cart.map((item) => ({
-                transactionId: result.paymentIntent.id,
-                buyerEmail: user?.email, // If you have auth context
-                sellerEmail: item.sellerEmail,
-                medicineId: item._id,
-                medicineName: item.name,
-                amount:
-                  item.pricePerUnit *
-                  item.quantity *
-                  (1 - item.discountPercentage / 100),
-                quantity: item.quantity,
-                date: new Date(),
-                status: "pending",
-              })),
-            }
-          );
+      return;
+    }
 
-          toast.success("Payment recorded!");
+    if (paymentIntent.status === "succeeded") {
+      try {
+        const paymentData = cart.map((item) => ({
+          transactionId: paymentIntent.id,
+          buyerEmail: user?.email || "guest@example.com",
+          sellerEmail: item.sellerEmail,
+          medicineId: item._id,
+          medicineName: item.name,
+          amount:
+            item.pricePerUnit *
+            item.quantity *
+            (1 - item.discountPercentage / 100),
+          quantity: item.quantity,
+          date: new Date(),
+          status: "pending",
+        }));
 
-          clearCart();
-          navigate("/invoice", {
-            state: {
-              paymentIntent: result.paymentIntent,
-              items: cart, // Send the actual items for invoice
-            },
-          });
-        } catch (error) {
-          console.error("Failed to record payment:", error);
-          toast.error("Payment succeeded but failed to save invoice data");
-        }
+        await axios.post("http://localhost:5000/api/payments/record-payment", {
+          payments: paymentData,
+        });
+
+        toast.success("Payment recorded!");
+        const invoiceItems = [...cart]; // backup before clearing
+        clearCart();
+
+        navigate("/invoice", {
+          state: {
+            paymentIntent,
+            items: invoiceItems,
+          },
+        });
+      } catch (err) {
+        console.error("Recording payment failed:", err);
+        toast.error("Payment succeeded but saving failed");
+        setProcessing(false);
       }
     }
   };
+
+  if (cart.length === 0) {
+    return (
+      <div className="text-center mt-20 text-xl text-error font-semibold">
+        Your cart is empty.
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-base-200 rounded-lg shadow">
       <h2 className="text-2xl font-bold mb-4">Checkout</h2>
 
-      <div className="mb-6">
-        <p className="text-lg">
-          Total to pay: <strong>${grandTotal.toFixed(2)}</strong>
-        </p>
-      </div>
+      <p className="text-lg mb-6">
+        Total to pay:{" "}
+        <strong className="text-primary">${grandTotal.toFixed(2)}</strong>
+      </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <CardElement
-          options={{ style: { base: { fontSize: "16px" } } }}
+          options={{
+            style: {
+              base: {
+                fontSize: "16px",
+                color: "#32325d",
+                fontFamily: "Arial, sans-serif",
+                "::placeholder": { color: "#a0aec0" },
+              },
+              invalid: { color: "#fa755a" },
+            },
+          }}
           className="bg-base-100 p-3 rounded border"
         />
         <button
