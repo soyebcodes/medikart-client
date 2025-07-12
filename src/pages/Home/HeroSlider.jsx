@@ -26,25 +26,26 @@ const HeroSlider = () => {
   }
 
   return (
-    <Swiper
-      modules={[Navigation, Pagination, Autoplay]}
-      navigation
-      pagination={{ clickable: true }}
-      autoplay={{ delay: 6000 }}
-      loop
-      className="w-full rounded-lg shadow-lg"
-      // style={{ height: "497px" }} // explicit height here
-    >
-      {slides.map(({ _id, imageUrl, medicineName, description }) => (
-        <SwiperSlide key={_id} className="h-full relative">
-          <img
-            src={imageUrl}
-            alt={medicineName || "Featured medicine"}
-            className="hero-slide w-full h-full object-cover rounded-lg"
-            loading="lazy"
-          />
+    <div className="hero-slider-container w-full max-w-7xl mx-auto px-4 py-8">
+      <Swiper
+        modules={[Navigation, Pagination, Autoplay]}
+        navigation
+        pagination={{ clickable: true }}
+        autoplay={{ delay: 6000 }}
+        loop
+        className="w-full rounded-lg shadow-lg"
+        // style={{ height: "497px" }} // explicit height here
+      >
+        {slides.map(({ _id, imageUrl, medicineName }) => (
+          <SwiperSlide key={_id} className="h-full relative">
+            <img
+              src={imageUrl}
+              alt={medicineName || "Featured medicine"}
+              className="hero-slide w-full h-full object-cover rounded-lg"
+              loading="lazy"
+            />
 
-          {/* <div className="absolute top-1/2 left-6 md:left-12 transform -translate-y-1/2 max-w-md text-white drop-shadow-md">
+            {/* <div className="absolute top-1/2 left-6 md:left-12 transform -translate-y-1/2 max-w-md text-white drop-shadow-md">
             <h1 className="text-3xl md:text-4xl font-extrabold leading-tight">
               {medicineName || "Your Trusted Pharmacy"}
             </h1>
@@ -59,9 +60,10 @@ const HeroSlider = () => {
               Shop Now
             </button>
           </div> */}
-        </SwiperSlide>
-      ))}
-    </Swiper>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
   );
 };
 

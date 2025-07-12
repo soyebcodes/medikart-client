@@ -1,10 +1,11 @@
 import React from "react";
 import HeroSlider from "./HeroSlider";
-import CategoryCardSection from "./Category/CategoryCard";
+
 import DiscountProducts from "./DiscountProducts";
 import NewArrivals from "./NewArrivals";
 import ReviewSection from "./ReviewSection";
 import { Suspense } from "react";
+import CategoryCardSection from "./Category/CategoryCardSection";
 
 const Home = () => {
   return (

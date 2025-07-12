@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import { Pagination, Autoplay, A11y } from "swiper/modules"; // Removed Navigation, Scrollbar
 import "swiper/css";
-import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 const DiscountProducts = () => {
@@ -47,12 +46,11 @@ const DiscountProducts = () => {
       </h2>
 
       <Swiper
-        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        modules={[Pagination, Autoplay, A11y]}
         spaceBetween={20}
         slidesPerView={1}
-        navigation
         pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
         breakpoints={{
           640: { slidesPerView: 2 },
           768: { slidesPerView: 3 },
@@ -88,7 +86,7 @@ const DiscountProducts = () => {
                     </span>
                   </div>
 
-                  <div className="badge badge-secondary mt-2">
+                  <div className="badge badge-secondary mt-2 mb-4">
                     {product.discountPercentage}% OFF
                   </div>
                 </div>

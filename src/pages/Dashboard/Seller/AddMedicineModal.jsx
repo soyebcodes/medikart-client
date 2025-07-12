@@ -100,9 +100,6 @@ const AddMedicineModal = ({ closeModal }) => {
         <option value="">Select Unit</option>
         <option value="MG">MG</option>
         <option value="ML">ML</option>
-        <option value="G">G</option>
-        <option value="Tablet">Tablet</option>
-        <option value="Capsule">Capsule</option>
       </select>
 
       <input
