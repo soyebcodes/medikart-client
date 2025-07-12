@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useCart } from "../contexts/CartContext";
 import { useCartStore } from "../../../store/cartStore";
 
 const fetchMedicinesByCategory = async (categoryName) => {
@@ -10,11 +9,10 @@ const fetchMedicinesByCategory = async (categoryName) => {
   return res.data;
 };
 
-const CategoryDetails = () => {
+const CategoryDetailsPage = () => {
   const { categoryName } = useParams();
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const addToCart = useCartStore((state) => state.addToCart);
-  const cart = useCartStore((state) => state.cart);
 
   const {
     data: medicines = [],
@@ -153,4 +151,4 @@ const CategoryDetails = () => {
   );
 };
 
-export default CategoryDetails;
+export default CategoryDetailsPage;

@@ -20,6 +20,7 @@ import SalesReport from "../pages/Dashboard/Admin/SalesReport";
 import ManageAdvertised from "../pages/Dashboard/Admin/ManageAdvertised";
 import UserPaymentHistory from "../pages/Dashboard/User/UserPaymentHistory";
 import CategoryDetails from "../pages/Home/Category/CategoryDetails";
+import CartPage from "../pages/Home/Cart/CartPage";
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
       {
         path: "/category/:categoryName",
         Component: CategoryDetails,
+      },
+      {
+        path: "/cart",
+        Component: CartPage,
       },
     ],
   },
