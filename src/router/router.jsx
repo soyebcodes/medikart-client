@@ -19,6 +19,7 @@ import PaymentManagement from "../pages/Dashboard/Admin/PaymentManagement";
 import SalesReport from "../pages/Dashboard/Admin/SalesReport";
 import ManageAdvertised from "../pages/Dashboard/Admin/ManageAdvertised";
 import UserPaymentHistory from "../pages/Dashboard/User/UserPaymentHistory";
+import CategoryDetails from "../pages/Home/Category/CategoryDetails";
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
       {
         path: "login",
         Component: Login,
+      },
+      {
+        path: "/category/:categoryName",
+        Component: CategoryDetails,
       },
     ],
   },
