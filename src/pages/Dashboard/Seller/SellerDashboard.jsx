@@ -1,37 +1,97 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "../../../hooks/useAuth";
 import axios from "axios";
+import { Link } from "react-router";
 
-const SellerDashboard = ({ sellerId }) => {
-  const [revenue, setRevenue] = useState({ paidTotal: 0, pendingTotal: 0 });
+const SellerDashboard = () => {
+  const { user } = useAuth();
 
-  useEffect(() => {
-    const fetchRevenue = async () => {
-      try {
-        const res = await axios.get(`/api/seller/${sellerId}/revenue`);
-        setRevenue(res.data);
-      } catch (err) {
-        console.error("Error fetching revenue:", err);
-      }
-    };
-    fetchRevenue();
-  }, [sellerId]);
+  const { data = [], isLoading } = useQuery({
+    queryKey: ["sellerPayments", user?.email],
+    queryFn: () =>
+      axios
+        .get(`http://localhost:5000/api/payments/seller/${user.email}`)
+        .then((res) => res.data.data),
+    enabled: !!user?.email,
+  });
+
+  const paidTotal = data
+    .filter((p) => p.status === "paid")
+    .reduce((acc, p) => acc + p.amount, 0);
+
+  const pendingTotal = data
+    .filter((p) => p.status === "pending")
+    .reduce((acc, p) => acc + p.amount, 0);
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Sales Overview</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="card bg-success text-white shadow-xl">
-          <div className="card-body">
-            <h2 className="card-title">Total Paid Revenue</h2>
-            <p className="text-2xl">${revenue.paidTotal}</p>
-          </div>
+    <div className="max-w-7xl mx-auto p-6">
+      <h1 className="text-3xl font-bold text-teal-600 mb-6 text-center">
+        Seller Dashboard
+      </h1>
+
+      {/* Revenue Summary */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        <div className="bg-base-200 p-6 rounded-lg shadow border border-base-300">
+          <h2 className="text-xl font-semibold mb-2 text-success">
+            Paid Revenue
+          </h2>
+          <p className="text-3xl font-bold text-success">
+            ${paidTotal.toFixed(2)}
+          </p>
         </div>
-        <div className="card bg-warning text-white shadow-xl">
-          <div className="card-body">
-            <h2 className="card-title">Pending Revenue</h2>
-            <p className="text-2xl">${revenue.pendingTotal}</p>
-          </div>
+        <div className="bg-base-200 p-6 rounded-lg shadow border border-base-300">
+          <h2 className="text-xl font-semibold mb-2 text-warning">
+            Pending Revenue
+          </h2>
+          <p className="text-3xl font-bold text-warning">
+            ${pendingTotal.toFixed(2)}
+          </p>
         </div>
+      </div>
+
+      {/* Dashboard Sections */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Manage Medicines */}
+        <Link
+          to="/dashboard/seller/manage-medicines"
+          className="bg-base-100 hover:bg-base-300 transition border border-base-300 p-5 rounded-lg shadow cursor-pointer"
+        >
+          <h3 className="text-xl font-semibold mb-2 text-primary">
+            Manage Medicines
+          </h3>
+          <p className="text-sm text-base-content">
+            View and manage all your added medicines. Add new medicines with
+            detailed info.
+          </p>
+        </Link>
+
+        {/* Payment History */}
+        <Link
+          to="/dashboard/seller/payment-history"
+          className="bg-base-100 hover:bg-base-300 transition border border-base-300 p-5 rounded-lg shadow cursor-pointer"
+        >
+          <h3 className="text-xl font-semibold mb-2 text-info">
+            Payment History
+          </h3>
+          <p className="text-sm text-base-content">
+            View detailed records of all purchases of your medicines with
+            payment status.
+          </p>
+        </Link>
+
+        {/* Advertise Requests */}
+        <Link
+          to="/dashboard/seller/advertisement"
+          className="bg-base-100 hover:bg-base-300 transition border border-base-300 p-5 rounded-lg shadow cursor-pointer"
+        >
+          <h3 className="text-xl font-semibold mb-2 text-accent">
+            Ask for Advertisement
+          </h3>
+          <p className="text-sm text-base-content">
+            Submit medicine info for homepage slider ads. Check current ad
+            statuses.
+          </p>
+        </Link>
       </div>
     </div>
   );

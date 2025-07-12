@@ -1,7 +1,9 @@
 import { NavLink } from "react-router";
+import DashboardHeader from "./DashboardHeader";
 
 const AdminSidebar = () => (
   <aside className="w-64 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-4">
+    <DashboardHeader title="Admin Dashboard" />
     <nav className="flex flex-col space-y-3">
       <NavLink
         to="/dashboard/admin/manage-users"

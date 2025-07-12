@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NavLink } from "react-router"; // Make sure to use react-router-dom
+import DashboardHeader from "./DashboardHeader";
 
 const UserSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,6 +9,7 @@ const UserSidebar = () => {
 
   return (
     <div className="max-w-screen-xl mx-auto md:flex min-h-screen">
+      <DashboardHeader title="User Dashboard" />
       {/* Mobile Top Bar */}
       <div className="flex justify-between items-center bg-base-200 p-4 md:hidden">
         <h2 className="text-xl font-semibold text-primary">User Dashboard</h2>
