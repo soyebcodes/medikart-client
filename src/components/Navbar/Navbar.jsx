@@ -53,14 +53,6 @@ const Navbar = () => {
       >
         <FaShoppingCart /> Cart
       </NavLink>
-      {user && (
-        <NavLink
-          to="/dashboard"
-          className="flex items-center gap-1 px-3 py-2 rounded hover:text-primary"
-        >
-          <FaUserCircle /> Dashboard
-        </NavLink>
-      )}
     </>
   );
 
@@ -102,6 +94,14 @@ const Navbar = () => {
                   >
                     Update Profile
                   </Link>
+                  {user && (
+                    <NavLink
+                      to="/dashboard"
+                      className="flex items-center gap-1 px-3 py-2 rounded hover:text-primary"
+                    >
+                      <FaUserCircle /> Dashboard
+                    </NavLink>
+                  )}
                   <button
                     onClick={logOutUser}
                     className="block w-full text-center px-4 py-2 hover:bg-base-300"

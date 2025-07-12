@@ -28,7 +28,7 @@ const AdminSidebar = () => (
         Sales Report
       </NavLink>
       <NavLink
-        to="/dashboard/admin/manage-banner"
+        to="/dashboard/admin/manage-advertised"
         className="hover:text-blue-500"
       >
         Manage Banner Advertise

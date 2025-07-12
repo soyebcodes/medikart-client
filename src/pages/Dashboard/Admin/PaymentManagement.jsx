@@ -4,13 +4,13 @@ const PaymentManagement = () => {
   const [payments, setPayments] = useState([]);
 
   useEffect(() => {
-    fetch("/api/payments")
+    fetch("http://localhost:5000/api/payments")
       .then((res) => res.json())
       .then((data) => setPayments(data));
   }, []);
 
-  const handleAcceptPayment = async (id) => {
-    const res = await fetch(`/api/payments/${id}`, {
+  const handleAcceptPayment = async (_id) => {
+    const res = await fetch(`http://localhost:5000/api/payments/${_id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status: "paid" }),
@@ -18,9 +18,7 @@ const PaymentManagement = () => {
 
     if (res.ok) {
       setPayments((prev) =>
-        prev.map((payment) =>
-          payment.id === id ? { ...payment, status: "paid" } : payment
-        )
+        prev.map((p) => (p._id === _id ? { ...p, status: "paid" } : p))
       );
     }
   };
@@ -51,7 +49,7 @@ const PaymentManagement = () => {
                 {payment.status === "pending" && (
                   <button
                     className="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded"
-                    onClick={() => handleAcceptPayment(payment.id)}
+                    onClick={() => handleAcceptPayment(payment._id)}
                   >
                     Accept Payment
                   </button>

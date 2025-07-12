@@ -16,6 +16,9 @@ import UserHome from "../pages/Dashboard/User/UserHome";
 import PaymentHistory from "../pages/Dashboard/Seller/PaymentHistory";
 import AdvertisementPage from "../pages/Dashboard/Seller/AdvertisementPage";
 import PaymentManagement from "../pages/Dashboard/Admin/PaymentManagement";
+import SalesReport from "../pages/Dashboard/Admin/SalesReport";
+import ManageAdvertised from "../pages/Dashboard/Admin/ManageAdvertised";
+import UserPaymentHistory from "../pages/Dashboard/User/UserPaymentHistory";
 
 export const router = createBrowserRouter([
   {
@@ -77,10 +80,30 @@ export const router = createBrowserRouter([
         element: <PaymentManagement />,
       },
       {
+        path: "admin/sales-report",
+        element: <SalesReport />,
+      },
+      {
+        path: "admin/manage-advertised",
+        element: (
+          <AdminRoute>
+            <ManageAdvertised />
+          </AdminRoute>
+        ),
+      },
+      {
         path: "user/home",
         element: (
           <PrivateRoute>
             <UserHome />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "user/payment-history",
+        element: (
+          <PrivateRoute>
+            <UserPaymentHistory />
           </PrivateRoute>
         ),
       },
