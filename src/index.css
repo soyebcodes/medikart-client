@@ -1,2 +1,12 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+.hero-slide {
+  height: 457px;
+}
+
+@media (min-width: 1024px) {
+  .hero-slide {
+    height: 600px; /* taller on large screens */
+  }
+}
