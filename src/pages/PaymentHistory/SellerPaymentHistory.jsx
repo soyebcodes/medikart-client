@@ -15,9 +15,10 @@ const SellerPaymentHistory = () => {
     enabled: !!user?.email, // Prevents running before user is available
     queryFn: async () => {
       const res = await axios.get(
-        `http://localhost:5000/api/payment-history/seller/${user.email}`
+        `http://localhost:5000/api/payments/seller/${user.email}`
       );
-      return res.data;
+      console.log("Payment history response:", res.data);
+      return res.data.data;
     },
   });
 
