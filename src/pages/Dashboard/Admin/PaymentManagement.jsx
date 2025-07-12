@@ -12,8 +12,10 @@ const PaymentManagement = () => {
     error,
   } = useQuery({
     queryKey: ["payments", "pending"],
-    queryFn: () =>
-      axiosSecure.get("/api/payments?status=pending").then((res) => res.data),
+    queryFn: async () => {
+      const res = await axiosSecure.get("/api/payments?status=pending");
+      return res.data.data; // <- This is the array
+    },
   });
 
   const approveMutation = useMutation({

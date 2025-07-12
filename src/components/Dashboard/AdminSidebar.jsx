@@ -1,39 +1,66 @@
 import { NavLink } from "react-router";
-import DashboardHeader from "./DashboardHeader";
+import {
+  FaUsers,
+  FaTags,
+  FaMoneyBillAlt,
+  FaChartLine,
+  FaAd,
+} from "react-icons/fa";
 
-const AdminSidebar = () => (
-  <aside className="w-64 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-4">
-    <nav className="flex flex-col space-y-3">
-      <NavLink
-        to="/dashboard/admin/manage-users"
-        className="hover:text-blue-500"
-      >
-        Manage Users
-      </NavLink>
-      <NavLink
-        to="/dashboard/admin/manage-categories"
-        className="hover:text-blue-500"
-      >
-        Manage Categories
-      </NavLink>
-      <NavLink to="/dashboard/admin/payments" className="hover:text-blue-500">
-        Payment Management
-      </NavLink>
-      <NavLink
-        to="/dashboard/admin/sales-report"
-        className="hover:text-blue-500"
-      >
-        Sales Report
-      </NavLink>
-      <NavLink
-        to="/dashboard/admin/manage-advertised"
-        className="hover:text-blue-500"
-      >
-        Manage Banner Advertise
-      </NavLink>
-      {/* add more admin links */}
-    </nav>
-  </aside>
-);
+const links = [
+  {
+    to: "/dashboard/admin/manage-users",
+    label: "Manage Users",
+    icon: <FaUsers />,
+  },
+  {
+    to: "/dashboard/admin/manage-categories",
+    label: "Manage Categories",
+    icon: <FaTags />,
+  },
+  {
+    to: "/dashboard/admin/payments",
+    label: "Payment Management",
+    icon: <FaMoneyBillAlt />,
+  },
+  {
+    to: "/dashboard/admin/sales-report",
+    label: "Sales Report",
+    icon: <FaChartLine />,
+  },
+  {
+    to: "/dashboard/admin/manage-advertised",
+    label: "Manage Advertise",
+    icon: <FaAd />,
+  },
+];
+
+const AdminSidebar = () => {
+  const navLinkClass = ({ isActive }) =>
+    isActive
+      ? "bg-primary text-white"
+      : "hover:bg-primary hover:text-white text-gray-700 dark:text-gray-300";
+
+  return (
+    <aside className="bg-base-200 dark:bg-base-300 w-20 md:w-64 p-4 h-screen sticky top-0 shadow-sm flex flex-col">
+      <nav className="flex flex-col gap-2 mt-14">
+        {links.map(({ to, label, icon }) => (
+          <NavLink
+            key={to}
+            to={to}
+            className={({ isActive }) =>
+              `${navLinkClass({
+                isActive,
+              })} flex items-center gap-3 p-2 rounded-lg transition-all duration-200`
+            }
+          >
+            <span className="text-lg">{icon}</span>
+            <span className="hidden md:inline">{label}</span>
+          </NavLink>
+        ))}
+      </nav>
+    </aside>
+  );
+};
 
 export default AdminSidebar;
