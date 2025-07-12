@@ -25,12 +25,13 @@ import CheckoutPage from "../pages/Checkout/CheckoutPage";
 import InvoicePage from "../pages/Checkout/InvoicePage";
 import SellerPaymentHistory from "../pages/PaymentHistory/SellerPaymentHistory";
 import UserPaymentHistory from "../pages/PaymentHistory/UserPaymentHistory";
-import Checkout from "../pages/Checkout/CheckoutPage";
 import ShopPage from "../pages/Home/ShopPage";
+import ErrorPage from "../pages/Error/Error";
 
 export const router = createBrowserRouter([
   {
     path: "/",
+    errorElement: <ErrorPage />,
     Component: MainLayout,
     children: [
       {
