@@ -1,6 +1,7 @@
 import React from "react";
 import { useCartStore } from "../../../store/cartStore";
 import { Link, Navigate } from "react-router";
+import { Helmet } from "react-helmet-async";
 
 const CartPage = () => {
   const { cart, removeFromCart, clearCart, updateQuantity } = useCartStore();
@@ -23,92 +24,97 @@ const CartPage = () => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-4">
-      <h2 className="text-3xl font-bold mb-6">Your Cart</h2>
+    <>
+      <Helmet>
+        <title>Your cart 🛒 </title>
+      </Helmet>
+      <div className="max-w-5xl mx-auto p-4">
+        <h2 className="text-3xl font-bold mb-6">Your Cart</h2>
 
-      <div className="overflow-x-auto">
-        <table className="table w-full table-zebra">
-          <thead>
-            <tr>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Price (per unit)</th>
-              <th>Quantity</th>
-              <th>Discount</th>
-              <th>Subtotal</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {cart.map((item) => {
-              const price = Number(item.pricePerUnit || 0);
-              const discount = Number(item.discountPercentage || 0);
-              const subtotal = item.quantity * price * (1 - discount / 100);
+        <div className="overflow-x-auto">
+          <table className="table w-full table-zebra">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price (per unit)</th>
+                <th>Quantity</th>
+                <th>Discount</th>
+                <th>Subtotal</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cart.map((item) => {
+                const price = Number(item.pricePerUnit || 0);
+                const discount = Number(item.discountPercentage || 0);
+                const subtotal = item.quantity * price * (1 - discount / 100);
 
-              return (
-                <tr key={item._id}>
-                  <td>
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-16 h-16 rounded object-cover"
-                    />
-                  </td>
-                  <td>{item.name}</td>
-                  <td>${price.toFixed(2)}</td>
-                  <td>
-                    <div className="flex items-center space-x-2">
+                return (
+                  <tr key={item._id}>
+                    <td>
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-16 h-16 rounded object-cover"
+                      />
+                    </td>
+                    <td>{item.name}</td>
+                    <td>${price.toFixed(2)}</td>
+                    <td>
+                      <div className="flex items-center space-x-2">
+                        <button
+                          className="btn btn-sm"
+                          onClick={() =>
+                            updateQuantity(item._id, item.quantity - 1)
+                          }
+                          disabled={item.quantity <= 1}
+                        >
+                          −
+                        </button>
+                        <span>{item.quantity}</span>
+                        <button
+                          className="btn btn-sm"
+                          onClick={() =>
+                            updateQuantity(item._id, item.quantity + 1)
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                    </td>
+                    <td>{discount > 0 ? `${discount}%` : "None"}</td>
+                    <td>${subtotal.toFixed(2)}</td>
+                    <td>
                       <button
-                        className="btn btn-sm"
-                        onClick={() =>
-                          updateQuantity(item._id, item.quantity - 1)
-                        }
-                        disabled={item.quantity <= 1}
+                        className="btn btn-sm btn-error"
+                        onClick={() => removeFromCart(item._id)}
                       >
-                        −
+                        Remove
                       </button>
-                      <span>{item.quantity}</span>
-                      <button
-                        className="btn btn-sm"
-                        onClick={() =>
-                          updateQuantity(item._id, item.quantity + 1)
-                        }
-                      >
-                        +
-                      </button>
-                    </div>
-                  </td>
-                  <td>{discount > 0 ? `${discount}%` : "None"}</td>
-                  <td>${subtotal.toFixed(2)}</td>
-                  <td>
-                    <button
-                      className="btn btn-sm btn-error"
-                      onClick={() => removeFromCart(item._id)}
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="flex justify-between items-center mt-8">
-        <button className="btn btn-warning" onClick={clearCart}>
-          Clear Cart
-        </button>
-
-        <div className="text-xl font-semibold">
-          Grand Total: ${grandTotal.toFixed(2)}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
 
-        <Link to="/checkout" className="btn btn-primary">
-          Checkout
-        </Link>
+        <div className="flex justify-between items-center mt-8">
+          <button className="btn btn-warning" onClick={clearCart}>
+            Clear Cart
+          </button>
+
+          <div className="text-xl font-semibold">
+            Grand Total: ${grandTotal.toFixed(2)}
+          </div>
+
+          <Link to="/checkout" className="btn btn-primary">
+            Checkout
+          </Link>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

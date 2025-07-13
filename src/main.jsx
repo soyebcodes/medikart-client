@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import AppWithLoader from "./components/AppWithLoader.jsx";
+import { HelmetProvider } from "react-helmet-async";
 
 const queryClient = new QueryClient();
 
@@ -16,33 +17,35 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AppWithLoader>
-      <Elements stripe={stripePromise}>
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <RouterProvider router={router} />
-            <Toaster
-              position="top-center"
-              toastOptions={{
-                style: {
-                  background: "#363636",
-                  color: "#fff",
-                },
-                success: {
+    <HelmetProvider>
+      <AppWithLoader>
+        <Elements stripe={stripePromise}>
+          <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+              <RouterProvider router={router} />
+              <Toaster
+                position="top-center"
+                toastOptions={{
                   style: {
-                    background: "#22c55e",
+                    background: "#363636",
+                    color: "#fff",
                   },
-                },
-                error: {
-                  style: {
-                    background: "#ef4444",
+                  success: {
+                    style: {
+                      background: "#22c55e",
+                    },
                   },
-                },
-              }}
-            />
-          </AuthProvider>
-        </QueryClientProvider>
-      </Elements>
-    </AppWithLoader>
+                  error: {
+                    style: {
+                      background: "#ef4444",
+                    },
+                  },
+                }}
+              />
+            </AuthProvider>
+          </QueryClientProvider>
+        </Elements>
+      </AppWithLoader>
+    </HelmetProvider>
   </StrictMode>
 );

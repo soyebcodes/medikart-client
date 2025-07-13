@@ -15,18 +15,8 @@ const HeroSlider = () => {
       .catch((err) => console.error("Failed to load slider ads:", err));
   }, []);
 
-  if (!slides.length) {
-    return (
-      <div className=" flex items-center justify-center bg-base-200 rounded-lg">
-        <p className="text-lg text-gray-500">
-          No featured products at the moment.
-        </p>
-      </div>
-    );
-  }
-
   return (
-    <div className="hero-slider-container w-full max-w-7xl mx-auto px-4 py-8">
+    <div className="hero-slider w-full max-w-7xl mx-auto px-4 py-8">
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         navigation

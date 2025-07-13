@@ -1,6 +1,6 @@
 # 🏥 Multi-Vendor E-commerce Pharmacy (MediKart)
 
-🔗 **[Visit Live Site](https://medikart-pharma.vercel.app)**
+🔗 **[Visit Live Site](https://medikartt.netlify.app/)**
 
 A full-stack multi-vendor pharmacy web application built using **MERN Stack**. The platform supports:
 
