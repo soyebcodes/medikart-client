@@ -8,6 +8,7 @@ import pharmacyLottie from "../../assets/lottie/login-animation.json"; // use a 
 import { useAuth } from "../../hooks/useAuth";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
+import { getJWTToken } from "../../api/auth";
 
 const Login = () => {
   const { googleLogin, githubLogin } = useAuth();
@@ -25,6 +26,9 @@ const Login = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
+
+      // Get JWT token after successful login
+      await getJWTToken(email);
       toast.success("Logged in successfully!");
       // navigate to dashboard for only admin role
       <Navigate to="/dashboard/admin/home" />;

@@ -2,9 +2,11 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useAuth } from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const SellerPaymentHistory = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
 
   const {
     data = [],
@@ -12,11 +14,9 @@ const SellerPaymentHistory = () => {
     error,
   } = useQuery({
     queryKey: ["sellerPayments", user?.email],
-    enabled: !!user?.email, // Prevents running before user is available
+    enabled: !!user?.email,
     queryFn: async () => {
-      const res = await axios.get(
-        `https://medikart-server-pjna.onrender.com/api/payments/seller/${user.email}`
-      );
+      const res = await axiosSecure.get(`/api/payments/seller/${user.email}`);
       console.log("Payment history response:", res.data);
       return res.data.data;
     },

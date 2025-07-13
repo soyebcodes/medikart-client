@@ -1,12 +1,18 @@
-import axios from "axios";
+
 
 export const getJWTToken = async (email) => {
-  const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/jwt`, {
-    email,
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/jwt`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }), // match backend structure
   });
 
-  const token = res.data.token;
-
-  localStorage.setItem("access-token", token); // store it
-  return token;
+  const data = await res.json();
+  if (data?.token) {
+    localStorage.setItem("access-token", data.token); // ✅ used by useAxiosSecure
+  } else {
+    throw new Error("Failed to get token");
+  }
 };

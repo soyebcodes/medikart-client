@@ -1,21 +1,22 @@
 import axios from "axios";
 
-const useAxiosSecure = () => {
-  const instance = axios.create({
-    baseURL:
-      import.meta.env.VITE_API_BASE_URL ||
-      "https://medikart-server-pjna.onrender.com",
-  });
+const axiosSecure = axios.create({
+  baseURL: "https://medikart-server-pjna.onrender.com", // your API base URL
+});
 
-  instance.interceptors.request.use((config) => {
+axiosSecure.interceptors.request.use(
+  (config) => {
     const token = localStorage.getItem("access-token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
-  });
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
-  return instance;
-};
-
-export default useAxiosSecure;
+export default function useAxiosSecure() {
+  return axiosSecure;
+}

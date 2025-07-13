@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useAuth } from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const UserPaymentHistory = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
 
   const {
     data = [],
@@ -12,10 +14,8 @@ const UserPaymentHistory = () => {
   } = useQuery({
     queryKey: ["userPayments", user?.email],
     queryFn: () =>
-      axios
-        .get(
-          `https://medikart-server-pjna.onrender.com/api/payments/user/${user.email}`
-        )
+      axiosSecure
+        .get(`/api/payments/user/${user.email}`)
         .then((res) => res.data.data),
     enabled: !!user?.email,
   });

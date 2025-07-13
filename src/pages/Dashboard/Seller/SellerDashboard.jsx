@@ -3,21 +3,21 @@ import { useAuth } from "../../../hooks/useAuth";
 import axios from "axios";
 import { Link } from "react-router";
 import { Helmet } from "react-helmet-async";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const SellerDashboard = () => {
   const { user } = useAuth();
 
+  const axiosSecure = useAxiosSecure();
+
   const { data = [], isLoading } = useQuery({
     queryKey: ["sellerPayments", user?.email],
     queryFn: () =>
-      axios
-        .get(
-          `https://medikart-server-pjna.onrender.com/api/payments/seller/${user.email}`
-        )
+      axiosSecure
+        .get(`/api/payments/seller/${user.email}`)
         .then((res) => res.data.data),
     enabled: !!user?.email,
   });
-
   const paidTotal = data
     .filter((p) => p.status === "paid")
     .reduce((acc, p) => acc + p.amount, 0);
