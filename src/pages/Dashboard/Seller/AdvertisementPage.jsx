@@ -100,14 +100,10 @@ const AdvertisementPage = () => {
                 <td>
                   <span
                     className={`badge ${
-                      ad.status === "approved"
-                        ? "badge-success"
-                        : ad.status === "pending"
-                        ? "badge-warning"
-                        : "badge-error"
+                      ad.isInSlider ? "badge-success" : "badge-warning"
                     }`}
                   >
-                    {ad.status}
+                    {ad.isInSlider ? "Approved" : "Pending"}
                   </span>
                 </td>
                 <td>{new Date(ad.createdAt).toLocaleDateString()}</td>
