@@ -36,6 +36,7 @@ const ManageCategories = () => {
     onSuccess: () => {
       toast.success("Category created");
       queryClient.invalidateQueries({ queryKey: ["categories"] });
+      setNewCategory({ categoryName: "", categoryImage: null });
     },
     onError: (error) => {
       console.error(
@@ -79,8 +80,14 @@ const ManageCategories = () => {
 
   const [editingCategory, setEditingCategory] = useState(null);
 
-  if (isLoading) return <p>Loading categories...</p>;
-  if (isError) return <p>Error loading categories.</p>;
+  if (isLoading)
+    return (
+      <p className="text-center text-gray-500 mt-8">Loading categories...</p>
+    );
+  if (isError)
+    return (
+      <p className="text-center text-red-500 mt-8">Error loading categories.</p>
+    );
 
   const handleFileChange = (file, setter) => {
     if (!file) return;
@@ -128,12 +135,13 @@ const ManageCategories = () => {
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Manage Categories</h2>
+    <div className="max-w-4xl mx-auto p-6">
+      <h2 className="text-3xl font-bold mb-6 text-center">Manage Categories</h2>
 
+      {/* Create Category Form */}
       <form
         onSubmit={handleCreate}
-        className="mb-6 flex flex-wrap gap-2 items-center"
+        className="mb-8 flex flex-col md:flex-row gap-3 items-center"
       >
         <input
           type="text"
@@ -142,7 +150,7 @@ const ManageCategories = () => {
           onChange={(e) =>
             setNewCategory({ ...newCategory, categoryName: e.target.value })
           }
-          className="input input-bordered"
+          className="input input-bordered flex-grow"
         />
         <input
           type="file"
@@ -152,20 +160,24 @@ const ManageCategories = () => {
               setNewCategory({ ...newCategory, categoryImage: file })
             )
           }
-          className="input input-bordered"
+          className="file-input file-input-bordered w-full max-w-xs"
         />
         <LoaderButton
           type="submit"
-          className="btn btn-primary"
+          className="btn btn-primary whitespace-nowrap"
           loading={createMutation.isLoading}
         >
           Add Category
         </LoaderButton>
       </form>
 
-      <ul>
+      {/* Categories List */}
+      <ul className="space-y-6">
         {data.map((cat) => (
-          <li key={cat._id} className="mb-4 flex items-center space-x-4">
+          <li
+            key={cat._id}
+            className="flex flex-col md:flex-row md:items-center gap-4 border border-gray-300 rounded p-4"
+          >
             {editingCategory?._id === cat._id ? (
               <>
                 <input
@@ -177,7 +189,7 @@ const ManageCategories = () => {
                       categoryName: e.target.value,
                     })
                   }
-                  className="input input-bordered"
+                  className="input input-bordered flex-grow"
                 />
                 <input
                   type="file"
@@ -190,43 +202,49 @@ const ManageCategories = () => {
                       })
                     )
                   }
-                  className="input input-bordered"
+                  className="file-input file-input-bordered w-full max-w-xs"
                 />
-                <LoaderButton
-                  onClick={handleUpdate}
-                  className="btn btn-success btn-sm mr-2"
-                  loading={updateMutation.isLoading}
-                >
-                  Save
-                </LoaderButton>
-                <button
-                  onClick={() => setEditingCategory(null)}
-                  className="btn btn-warning btn-sm"
-                >
-                  Cancel
-                </button>
+                <div className="flex gap-2">
+                  <LoaderButton
+                    onClick={handleUpdate}
+                    className="btn btn-success btn-sm"
+                    loading={updateMutation.isLoading}
+                  >
+                    Save
+                  </LoaderButton>
+                  <button
+                    onClick={() => setEditingCategory(null)}
+                    className="btn btn-warning btn-sm"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </>
             ) : (
               <>
                 <img
                   src={cat.categoryImage}
                   alt={cat.categoryName}
-                  className="w-12 h-12 rounded"
+                  className="w-16 h-16 rounded object-cover"
                 />
-                <span>{cat.categoryName}</span>
-                <button
-                  onClick={() => setEditingCategory(cat)}
-                  className="btn btn-outline btn-sm ml-auto mr-2"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => deleteMutation.mutate(cat._id)}
-                  className="btn btn-error btn-sm"
-                  disabled={deleteMutation.isLoading}
-                >
-                  Delete
-                </button>
+                <span className="font-semibold flex-grow">
+                  {cat.categoryName}
+                </span>
+                <div className="ml-auto flex gap-2">
+                  <button
+                    onClick={() => setEditingCategory(cat)}
+                    className="btn btn-outline btn-sm"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => deleteMutation.mutate(cat._id)}
+                    className="btn btn-error btn-sm"
+                    disabled={deleteMutation.isLoading}
+                  >
+                    Delete
+                  </button>
+                </div>
               </>
             )}
           </li>

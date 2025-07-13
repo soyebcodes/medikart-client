@@ -10,25 +10,28 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import Logo from "../../assets/medikart.png";
-const lightStyles = StyleSheet.create({
+
+const neutralColor = "#4b5563"; // gray-600
+
+const neutralStyles = StyleSheet.create({
   page: {
     padding: 30,
     fontSize: 12,
     fontFamily: "Helvetica",
     backgroundColor: "#fff",
-    color: "#000",
+    color: neutralColor,
   },
   section: { marginBottom: 10 },
   heading: {
     fontSize: 20,
     marginBottom: 10,
     fontWeight: "bold",
-    color: "#0e7490",
+    color: neutralColor,
   },
   row: {
     flexDirection: "row",
     borderBottomWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#d1d5db", // light gray border
     paddingBottom: 4,
     marginBottom: 4,
   },
@@ -38,46 +41,13 @@ const lightStyles = StyleSheet.create({
   footer: {
     marginTop: 20,
     fontSize: 10,
-    color: "#6b7280",
+    color: "#9ca3af", // lighter gray for footer
     textAlign: "center",
   },
 });
 
-const darkStyles = StyleSheet.create({
-  page: {
-    padding: 30,
-    fontSize: 12,
-    fontFamily: "Helvetica",
-    backgroundColor: "#1f2937",
-    color: "#f3f4f6",
-  },
-  section: { marginBottom: 10 },
-  heading: {
-    fontSize: 20,
-    marginBottom: 10,
-    fontWeight: "bold",
-    color: "#38bdf8",
-  },
-  row: {
-    flexDirection: "row",
-    borderBottomWidth: 1,
-    borderColor: "#555",
-    paddingBottom: 4,
-    marginBottom: 4,
-  },
-  cell: { flex: 1 },
-  totalRow: { marginTop: 10, fontWeight: "bold", textAlign: "right" },
-  logo: { width: 80, height: 80, marginBottom: 10, alignSelf: "center" },
-  footer: {
-    marginTop: 20,
-    fontSize: 10,
-    color: "#9ca3af",
-    textAlign: "center",
-  },
-});
-
-const InvoiceDocument = ({ paymentIntent, items, theme }) => {
-  const styles = theme === "dark" ? darkStyles : lightStyles;
+const InvoiceDocument = ({ paymentIntent, items }) => {
+  const styles = neutralStyles;
   const total = items.reduce(
     (acc, item) =>
       acc +
@@ -91,10 +61,7 @@ const InvoiceDocument = ({ paymentIntent, items, theme }) => {
     <Document>
       <Page style={styles.page}>
         <View style={{ alignItems: "center", marginBottom: 20 }}>
-          <Image
-            src={Logo} // Your logo URL
-            style={styles.logo}
-          />
+          <Image src={Logo} style={styles.logo} />
         </View>
 
         <View style={styles.section}>
@@ -147,40 +114,26 @@ const InvoicePage = () => {
   const navigate = useNavigate();
   const { paymentIntent, items } = location.state || {};
 
-  const [theme, setTheme] = useState("light");
-
   useEffect(() => {
     if (!paymentIntent || !items) {
       navigate("/");
     }
-
-    const isDark =
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
-    setTheme(isDark ? "dark" : "light");
   }, [paymentIntent, items, navigate]);
 
   const printInvoice = () => window.print();
 
   return (
-    <div
-      className={
-        theme === "dark"
-          ? "bg-gray-900 text-gray-100 min-h-screen p-8"
-          : "bg-white text-gray-900 min-h-screen p-8"
-      }
-    >
-      <h1 className="text-3xl font-bold text-center mb-8">Invoice</h1>
+    <div className="bg-white text-gray-700 min-h-screen p-8">
+      <h1
+        className="text-3xl font-bold text-center mb-8"
+        style={{ color: neutralColor }}
+      >
+        Invoice
+      </h1>
 
       {paymentIntent && items && (
         <>
-          <div
-            className={
-              theme === "dark"
-                ? "bg-gray-800 rounded-xl shadow-lg p-6 max-w-4xl mx-auto"
-                : "bg-gray-100 rounded-xl shadow-lg p-6 max-w-4xl mx-auto"
-            }
-          >
+          <div className="bg-gray-50 rounded-xl shadow-lg p-6 max-w-4xl mx-auto">
             <div className="text-center mb-6">
               <img
                 src={Logo}
@@ -190,7 +143,10 @@ const InvoicePage = () => {
               />
             </div>
 
-            <div className="mb-4 space-y-1 border-b border-gray-300 dark:border-gray-700 pb-4">
+            <div
+              className="mb-4 space-y-1 border-b border-gray-300 pb-4"
+              style={{ color: neutralColor }}
+            >
               <p>
                 <strong>Date:</strong> {new Date().toLocaleDateString()}
               </p>
@@ -205,14 +161,11 @@ const InvoicePage = () => {
               </p>
             </div>
 
-            <div className="max-h-[400px] overflow-y-auto rounded-md border border-gray-300 dark:border-gray-700">
+            <div className="max-h-[400px] overflow-y-auto rounded-md border border-gray-300">
               <table className="w-full table-auto border-collapse">
                 <thead
-                  className={
-                    theme === "dark"
-                      ? "bg-gray-700 text-gray-200 sticky top-0"
-                      : "bg-gray-300 sticky top-0"
-                  }
+                  className="bg-gray-200 sticky top-0"
+                  style={{ color: neutralColor }}
                 >
                   <tr>
                     <th className="border border-gray-400 px-4 py-2 text-left">
@@ -244,11 +197,8 @@ const InvoicePage = () => {
                     return (
                       <tr
                         key={item._id}
-                        className={
-                          theme === "dark"
-                            ? "even:bg-gray-600"
-                            : "even:bg-gray-100"
-                        }
+                        className="even:bg-gray-100"
+                        style={{ color: neutralColor }}
                       >
                         <td className="border border-gray-400 px-4 py-2">
                           {item.name}
@@ -272,11 +222,8 @@ const InvoicePage = () => {
                     );
                   })}
                   <tr
-                    className={
-                      theme === "dark"
-                        ? "bg-gray-700 font-bold"
-                        : "bg-gray-300 font-bold"
-                    }
+                    className="bg-gray-200 font-bold"
+                    style={{ color: neutralColor }}
                   >
                     <td
                       colSpan={5}
@@ -306,21 +253,30 @@ const InvoicePage = () => {
           <div className="flex justify-center gap-4 mt-8">
             <PDFDownloadLink
               document={
-                <InvoiceDocument
-                  paymentIntent={paymentIntent}
-                  items={items}
-                  theme={theme}
-                />
+                <InvoiceDocument paymentIntent={paymentIntent} items={items} />
               }
               fileName={`Invoice-${paymentIntent.id}.pdf`}
-              className="btn btn-primary hover:btn-secondary focus:btn-secondary transition-colors duration-200"
+              className="btn btn-neutral"
+              style={{
+                backgroundColor: neutralColor,
+                color: "#fff",
+                padding: "0.5rem 1rem",
+                borderRadius: "0.375rem",
+                textDecoration: "none",
+              }}
             >
               {({ loading }) => (loading ? "Preparing PDF..." : "Download PDF")}
             </PDFDownloadLink>
 
             <button
               onClick={printInvoice}
-              className="btn btn-secondary hover:btn-primary focus:btn-primary transition-colors duration-200"
+              className="btn btn-neutral"
+              style={{
+                backgroundColor: neutralColor,
+                color: "#fff",
+                padding: "0.5rem 1rem",
+                borderRadius: "0.375rem",
+              }}
             >
               Print Invoice
             </button>
