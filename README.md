@@ -1,12 +1,68 @@
-# React + Vite
+# 🏥 Multi-Vendor E-commerce Pharmacy (MediKart)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🔗 **[Visit Live Site](https://medikart-pharma.vercel.app)**
 
-Currently, two official plugins are available:
+A full-stack multi-vendor pharmacy web application built using **MERN Stack**. The platform supports:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🛍️ Buyers to browse and purchase medicines
+- 🧑‍💼 Sellers to upload, manage, and advertise medicines
+- 🧑‍💻 Admins to manage users, orders, and site content
 
-## Expanding the ESLint configuration
+This project features authentication, role-based dashboards, payment processing via Stripe, dynamic search/filtering, and responsive UI using **Tailwind CSS + DaisyUI**, State Management with Zustand.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🚀 Tech Stack
+
+| Frontend               | Backend                    | Other Tools        |
+| ---------------------- | -------------------------- | ------------------ |
+| React + React Router   | Node.js + Express.js       | Stripe Integration |
+| Tailwind CSS + DaisyUI | MongoDB + Mongoose         | React Query        |
+| Axios, Zustand         | JWT Auth & Role Protection | Framer Motion      |
+
+---
+
+## 📁 Features
+
+### 🌐 Public (Unauthenticated)
+
+- Home page with featured sections (new arrivals, categories, testimonials)
+- Shop page with table view of all medicines
+- Modal to view medicine details
+- Add-to-cart functionality
+- Category-wise filtering
+- Search, sorting, and pagination
+
+### 👤 Authentication
+
+- Register/Login (JWT-based)
+- Role-based redirection: User, Seller, Admin
+
+### 👤 User Dashboard
+
+- View payment history
+- Responsive sidebar navigation
+- Checkout with Stripe payment
+
+### 🧑‍💼 Seller Dashboard
+
+- Add/edit/delete medicines
+- View their products and sales
+- Advertise selected medicines
+
+### 🛠️ Admin Dashboard
+
+- Manage users (change roles)
+- View all medicines
+- View platform-wide transactions
+
+---
+
+## 🔧 Setup Instructions
+
+### 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/soyebcodes/medikart-server.git
+cd medikart-client
+```
