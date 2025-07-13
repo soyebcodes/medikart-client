@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Helmet } from "react-helmet-async";
 
 const AdminDashboard = () => {
   const [paidTotal, setPaidTotal] = useState(0);
@@ -51,69 +52,78 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-primary">
-        Manage User, Seller, Sales Report and Manage Advertisement!
-      </h1>
+    <>
+      <Helmet>
+        <title>Admin Panel | MediKart</title>
+      </Helmet>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h1 className="text-3xl font-bold mb-8 text-primary">
+          Manage User, Seller, Sales Report and Manage Advertisement!
+        </h1>
 
-      {/* Totals */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
-        <div className="card bg-teal-500 text-white shadow-md">
-          <div className="card-body">
-            <h2 className="card-title text-xl">Paid Total</h2>
-            <p className="text-3xl font-bold">${paidTotal.toFixed(2)}</p>
+        {/* Totals */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+          <div className="card bg-teal-500 text-white shadow-md">
+            <div className="card-body">
+              <h2 className="card-title text-xl">Paid Total</h2>
+              <p className="text-3xl font-bold">${paidTotal.toFixed(2)}</p>
+            </div>
+          </div>
+
+          <div className="card bg-yellow-400 text-gray-900 shadow-md">
+            <div className="card-body">
+              <h2 className="card-title text-xl">Pending Total</h2>
+              <p className="text-3xl font-bold">${pendingTotal.toFixed(2)}</p>
+            </div>
           </div>
         </div>
 
-        <div className="card bg-yellow-400 text-gray-900 shadow-md">
-          <div className="card-body">
-            <h2 className="card-title text-xl">Pending Total</h2>
-            <p className="text-3xl font-bold">${pendingTotal.toFixed(2)}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Payments Table */}
-      <div className="bg-base-100 rounded-lg shadow-md p-4 overflow-x-auto">
-        <h2 className="text-2xl font-semibold mb-4">Recent Payments</h2>
-        {recentPayments.length === 0 ? (
-          <p className="text-center text-gray-500">No recent payments found.</p>
-        ) : (
-          <table className="table w-full">
-            <thead>
-              <tr className="bg-base-200 text-sm text-base-content">
-                <th>Transaction ID</th>
-                <th>Buyer Email</th>
-                <th>Amount ($)</th>
-                <th>Status</th>
-                <th>Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentPayments.map((p) => (
-                <tr key={p._id} className="hover:bg-base-100 text-sm">
-                  <td className="break-words max-w-[180px]">
-                    {p.transactionId}
-                  </td>
-                  <td className="break-all max-w-[160px]">{p.buyerEmail}</td>
-                  <td>${p.amount.toFixed(2)}</td>
-                  <td>
-                    <span
-                      className={`badge ${
-                        p.status === "paid" ? "badge-success" : "badge-warning"
-                      }`}
-                    >
-                      {p.status}
-                    </span>
-                  </td>
-                  <td>{new Date(p.date).toLocaleString()}</td>
+        {/* Recent Payments Table */}
+        <div className="bg-base-100 rounded-lg shadow-md p-4 overflow-x-auto">
+          <h2 className="text-2xl font-semibold mb-4">Recent Payments</h2>
+          {recentPayments.length === 0 ? (
+            <p className="text-center text-gray-500">
+              No recent payments found.
+            </p>
+          ) : (
+            <table className="table w-full">
+              <thead>
+                <tr className="bg-base-200 text-sm text-base-content">
+                  <th>Transaction ID</th>
+                  <th>Buyer Email</th>
+                  <th>Amount ($)</th>
+                  <th>Status</th>
+                  <th>Date</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+              </thead>
+              <tbody>
+                {recentPayments.map((p) => (
+                  <tr key={p._id} className="hover:bg-base-100 text-sm">
+                    <td className="break-words max-w-[180px]">
+                      {p.transactionId}
+                    </td>
+                    <td className="break-all max-w-[160px]">{p.buyerEmail}</td>
+                    <td>${p.amount.toFixed(2)}</td>
+                    <td>
+                      <span
+                        className={`badge ${
+                          p.status === "paid"
+                            ? "badge-success"
+                            : "badge-warning"
+                        }`}
+                      >
+                        {p.status}
+                      </span>
+                    </td>
+                    <td>{new Date(p.date).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -87,10 +87,6 @@ const ShopPage = () => {
     <>
       <Helmet>
         <title>Shop | MediKart</title>
-        <meta
-          name="description"
-          content="Login to your MediKart account to order medicines and manage your dashboard."
-        />
       </Helmet>
       <div className="max-w-7xl mx-auto p-6">
         <h1 className="text-3xl font-bold mb-8 text-primary">Shop Medicines</h1>

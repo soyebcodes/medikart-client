@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import { toast } from "react-hot-toast";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase.config";
@@ -11,7 +11,9 @@ import { FaGithub } from "react-icons/fa";
 
 const Login = () => {
   const { googleLogin, githubLogin } = useAuth();
+
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -20,10 +22,12 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     const { email, password } = data;
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
       toast.success("Logged in successfully!");
-      navigate("/"); // or dashboard
+      // navigate to dashboard for only admin role
+      <Navigate to="/dashboard/admin/home" />;
     } catch (err) {
       toast.error(err.message);
     }

@@ -27,6 +27,8 @@ import SellerPaymentHistory from "../pages/PaymentHistory/SellerPaymentHistory";
 import UserPaymentHistory from "../pages/PaymentHistory/UserPaymentHistory";
 import ShopPage from "../pages/Home/ShopPage";
 import ErrorPage from "../pages/Error/Error";
+import PublicRoute from "../routes/PublicRoute";
+import UpdateProfile from "../pages/UpdateProfile/UpdateProfile";
 
 export const router = createBrowserRouter([
   {
@@ -40,11 +42,23 @@ export const router = createBrowserRouter([
       },
       {
         path: "register",
-        Component: Register,
+        element: (
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        ),
       },
       {
         path: "login",
-        Component: Login,
+        element: (
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        ),
+      },
+      {
+        path: "update-profile",
+        Component: UpdateProfile,
       },
       {
         path: "/category/:categoryName",

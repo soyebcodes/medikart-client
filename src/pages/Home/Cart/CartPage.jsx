@@ -26,7 +26,7 @@ const CartPage = () => {
   return (
     <>
       <Helmet>
-        <title>Your cart 🛒 </title>
+        <title>🛒 | MediKart</title>
       </Helmet>
       <div className="max-w-5xl mx-auto p-4">
         <h2 className="text-3xl font-bold mb-6">Your Cart</h2>
