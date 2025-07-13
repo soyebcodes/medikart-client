@@ -27,57 +27,68 @@ const ManageAdvertised = () => {
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Manage Advertised Medicines</h2>
-      <table className="w-full text-left border">
-        <thead className="">
-          <tr>
-            <th className="p-2">Image</th>
-            <th className="p-2">Name</th>
-            <th className="p-2">Description</th>
-            <th className="p-2">Seller Email</th>
-            <th className="p-2">Status</th>
-            <th className="p-2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {ads.map((ad) => (
-            <tr key={ad._id} className="border-t">
-              <td className="p-2">
-                <img
-                  src={ad.imageUrl}
-                  alt={ad.medicineName}
-                  className="h-12 w-12 object-cover rounded"
-                />
-              </td>
-              <td className="p-2">{ad.medicineName}</td>
-              <td className="p-2">{ad.description}</td>
-              <td className="p-2">{ad.sellerEmail}</td>
-              <td className="p-2">
-                {ad.isInSlider ? (
-                  <span className="text-green-600 font-semibold">
-                    In Slider
-                  </span>
-                ) : (
-                  <span className="text-red-600 font-semibold">
-                    Not in Slider
-                  </span>
-                )}
-              </td>
-              <td className="p-2">
-                <button
-                  onClick={() => toggleSlider(ad._id)}
-                  className={`px-4 py-1 rounded text-white ${
-                    ad.isInSlider ? "bg-red-600" : "bg-green-600"
-                  }`}
-                >
-                  {ad.isInSlider ? "Remove from Slide" : "Add to Slide"}
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="p-6 max-w-7xl mx-auto">
+      <h2 className="text-2xl font-bold mb-6 text-center">
+        📢 Manage Advertised Medicines
+      </h2>
+
+      {ads.length === 0 ? (
+        <p className="text-center text-gray-500">
+          No advertised medicines yet.
+        </p>
+      ) : (
+        <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-200">
+          <table className="table w-full table-zebra">
+            <thead className="bg-base-200 text-base font-semibold">
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Seller Email</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ads.map((ad) => (
+                <tr key={ad._id}>
+                  <td>
+                    <img
+                      src={ad.imageUrl}
+                      alt={ad.medicineName}
+                      className="h-12 w-12 object-cover rounded"
+                    />
+                  </td>
+                  <td>{ad.medicineName}</td>
+                  <td className="max-w-xs truncate" title={ad.description}>
+                    {ad.description}
+                  </td>
+                  <td>{ad.sellerEmail}</td>
+                  <td>
+                    <span
+                      className={`badge ${
+                        ad.isInSlider ? "badge-success" : "badge-error"
+                      }`}
+                    >
+                      {ad.isInSlider ? "In Slider" : "Not in Slider"}
+                    </span>
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => toggleSlider(ad._id)}
+                      className={`btn btn-sm ${
+                        ad.isInSlider ? "btn-error" : "btn-success"
+                      }`}
+                    >
+                      {ad.isInSlider ? "Remove from Slide" : "Add to Slide"}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
