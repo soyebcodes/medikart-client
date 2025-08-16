@@ -6,6 +6,7 @@ import ReviewSection from "./ReviewSection";
 import { Suspense } from "react";
 import CategoryCardSection from "./Category/CategoryCardSection";
 import { Helmet } from "react-helmet-async";
+import WhyChoseUs from "./WhyChoseUs";
 
 const Home = () => {
   return (
@@ -49,6 +50,7 @@ const Home = () => {
       >
         <NewArrivals />
       </Suspense>
+      <WhyChoseUs />
       <ReviewSection />
     </div>
   );

@@ -24,7 +24,6 @@ const HeroSlider = () => {
         autoplay={{ delay: 6000 }}
         loop
         className="w-full rounded-lg shadow-lg"
-        // style={{ height: "497px" }} // explicit height here
       >
         {slides.map(({ _id, imageUrl, medicineName }) => (
           <SwiperSlide key={_id} className="h-full relative">
