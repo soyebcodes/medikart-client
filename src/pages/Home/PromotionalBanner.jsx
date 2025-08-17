@@ -2,7 +2,7 @@ import React from "react";
 
 const PromotionalBanner = () => {
   return (
-    <section class="py-10 bg-emerald-500 dark:bg-emerald-600">
+    <section class="py-10 bg-emerald-500 dark:bg-emerald-600 max-w-7xl mx-auto">
       <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between text-center md:text-left">
         <div>
           <h2 class="text-3xl font-bold text-white">
