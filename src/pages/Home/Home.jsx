@@ -8,6 +8,7 @@ import CategoryCardSection from "./Category/CategoryCardSection";
 import { Helmet } from "react-helmet-async";
 import WhyChoseUs from "./WhyChoseUs";
 import PromotionalBanner from "./PromotionalBanner";
+import NewsLetter from "./NewsLetter";
 
 const Home = () => {
   return (
@@ -54,6 +55,7 @@ const Home = () => {
       <WhyChoseUs />
       <PromotionalBanner />
       <ReviewSection />
+      <NewsLetter />
     </div>
   );
 };
