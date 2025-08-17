@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import CategoryCardSection from "./Category/CategoryCardSection";
 import { Helmet } from "react-helmet-async";
 import WhyChoseUs from "./WhyChoseUs";
+import PromotionalBanner from "./PromotionalBanner";
 
 const Home = () => {
   return (
@@ -51,6 +52,7 @@ const Home = () => {
         <NewArrivals />
       </Suspense>
       <WhyChoseUs />
+      <PromotionalBanner />
       <ReviewSection />
     </div>
   );
