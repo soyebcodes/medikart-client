@@ -2,7 +2,7 @@ import React from "react";
 
 const WhyChoseUs = () => {
   return (
-    <section class="py-12 bg-gray-50 dark:bg-gray-900">
+    <section class="py-12 bg-gray-50 dark:bg-gray-900 max-w-7xl mx-auto rounded-2xl">
       <div class="max-w-7xl mx-auto px-6 text-center">
         <h2 class="text-3xl font-bold text-gray-800 dark:text-white">
           Why Choose Us
